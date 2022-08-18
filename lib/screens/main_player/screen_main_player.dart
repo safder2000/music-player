@@ -212,29 +212,38 @@ class ScreenMainPlayerState extends State<ScreenMainPlayer> {
                           ),
                         ],
                       ),
+//============================ Seekbar =======================================================
                       SizedBox(
-                        width: 320,
-                        child: ProgressBar(
-                          progress: const Duration(milliseconds: 2000),
-                          buffered: const Duration(milliseconds: 2000),
-                          total: Duration(
-                              milliseconds: widget.songInfo.duration!.toInt()),
-                          progressBarColor:
-                              const Color.fromARGB(255, 219, 242, 39),
-                          baseBarColor: Colors.white.withOpacity(0.24),
-                          bufferedBarColor: Colors.white.withOpacity(0.24),
-                          thumbColor: Colors.white,
-                          barHeight: 3.0,
-                          thumbRadius: 5.0,
-                          timeLabelTextStyle:
-                              const TextStyle(color: Colors.white),
-                          // onDragUpdate: () async {
-                          //   final position = Duration(seconds: value.toInt());
-                          //   await widget.assetsAudioPlayer.seek(position);
-                          //   await widget.assetsAudioPlayer.resume();
-                          // },
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        child: widget.assetsAudioPlayer
+                            .builderRealtimePlayingInfos(
+                          builder: (ctx, infos) {
+                            Duration currentPos = infos.currentPosition;
+                            Duration total = infos.duration;
+                            return ProgressBar(
+                              progress: currentPos,
+                              total: total,
+                              // progressBarColor: Colors.grey,
+                              progressBarColor:
+                                  const Color.fromARGB(255, 219, 242, 39),
+                              baseBarColor: Colors.white.withOpacity(0.24),
+                              bufferedBarColor: Colors.white.withOpacity(0.24),
+                              thumbColor: Colors.white,
+                              barHeight: 3.0,
+                              thumbRadius: 5.0,
+                              // thumbColor: Colors.grey,
+                              timeLabelTextStyle: const TextStyle(
+                                fontFamily: 'Poppins',
+                                color: Colors.grey,
+                              ),
+                              onSeek: (to) {
+                                widget.assetsAudioPlayer.seek(to);
+                              },
+                            );
+                          },
                         ),
                       ),
+//========================= Seekbar End ================================================================
                       Expanded(
                         flex: 1,
                         child: Row(
@@ -260,13 +269,12 @@ class ScreenMainPlayerState extends State<ScreenMainPlayer> {
                               child: IconButton(
                                   onPressed: () {
                                     setState(() {
-                                      setState(() {
-                                        if (isPause) {
-                                          widget.assetsAudioPlayer.pause();
-                                        } else {
-                                          widget.assetsAudioPlayer.play();
-                                        }
-                                      });
+                                      if (isPause) {
+                                        widget.assetsAudioPlayer.pause();
+                                      } else {
+                                        widget.assetsAudioPlayer.play();
+                                      }
+
                                       isPause = !isPause;
                                     });
                                   }, //FaIcon(FontAwesomeIcons.gamepad),

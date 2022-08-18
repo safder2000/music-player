@@ -1,4 +1,5 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
+import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:music_player/main.dart';
 import 'package:music_player/screens/main_player/screen_main_player.dart';
@@ -44,7 +45,7 @@ class _LocalSongListBuilderState extends State<LocalSongListBuilder> {
             songInfo: item.data![index],
             songDuration: item.data![index].duration! / 60000,
             songIndex: index,
-            test: test,
+            assetsAudioPlayer: assetsAudioPlayer,
           ),
           itemCount: item.data!.length,
         );

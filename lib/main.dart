@@ -11,7 +11,7 @@ void main() {
   });
 }
 
-AssetsAudioPlayer test = AssetsAudioPlayer();
+AssetsAudioPlayer assetsAudioPlayer = AssetsAudioPlayer();
 // final AudioPlayer audioPlayer = AudioPlayer();
 
 class MusicPlayer extends StatelessWidget {

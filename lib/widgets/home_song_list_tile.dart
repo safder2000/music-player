@@ -11,7 +11,7 @@ class HomeSongListTile extends StatefulWidget {
     Key? key,
     this.songDuration,
     this.songIndex,
-    required this.test,
+    required this.assetsAudioPlayer,
     required this.songInfo,
     this.songImg = const AssetImage('assets/images/defult.jpg'),
   }) : super(key: key);
@@ -20,7 +20,7 @@ class HomeSongListTile extends StatefulWidget {
   SongModel songInfo;
   final songDuration;
   final songIndex;
-  AssetsAudioPlayer test;
+  AssetsAudioPlayer assetsAudioPlayer;
 
   @override
   State<HomeSongListTile> createState() => _HomeSongListTileState();
@@ -45,7 +45,7 @@ class _HomeSongListTileState extends State<HomeSongListTile> {
                           songImg: widget.songImg,
                           // songDuration: widget.songDuration,
                           // songIndex: widget.songIndex,
-                          assetsAudioPlayer: widget.test,
+                          assetsAudioPlayer: widget.assetsAudioPlayer,
                         ),
                       ),
                     );
