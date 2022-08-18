@@ -1,10 +1,18 @@
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
+// import 'package:just_audio/just_audio.dart';
 import 'package:music_player/screens/screen_splash.dart';
 
 void main() {
   Paint.enableDithering = true;
   runApp(const MusicPlayer());
+  AssetsAudioPlayer.setupNotificationsOpenAction((notification) {
+    return true;
+  });
 }
+
+AssetsAudioPlayer test = AssetsAudioPlayer();
+// final AudioPlayer audioPlayer = AudioPlayer();
 
 class MusicPlayer extends StatelessWidget {
   const MusicPlayer({Key? key}) : super(key: key);
@@ -14,11 +22,11 @@ class MusicPlayer extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primaryColor: Color.fromARGB(255, 219, 242, 39),
-        hintColor: Color.fromARGB(255, 219, 242, 39),
+        primaryColor: const Color.fromARGB(255, 219, 242, 39),
+        hintColor: const Color.fromARGB(255, 219, 242, 39),
         fontFamily: 'Sen',
         colorScheme: ColorScheme.fromSwatch().copyWith(
-          secondary: Color.fromARGB(255, 219, 242, 39),
+          secondary: const Color.fromARGB(255, 219, 242, 39),
         ),
       ),
       home: const ScreenSplash(),

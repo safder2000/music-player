@@ -1,11 +1,7 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:music_player/screens/screen_all.dart';
-import 'package:music_player/screens/screen_home.dart';
-import 'package:music_player/screens/screen_main.dart';
+
+import 'package:music_player/screens/menu/screen_main.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class ScreenSplash extends StatefulWidget {
   const ScreenSplash({Key? key}) : super(key: key);
@@ -20,6 +16,10 @@ class _ScreenSplashState extends State<ScreenSplash> {
     load();
     // TODO: implement initState
     super.initState();
+    Permission.storage.request();
+    setState(() {
+      PermissionStatus;
+    });
   }
 
   @override
@@ -40,7 +40,7 @@ class _ScreenSplashState extends State<ScreenSplash> {
           ),
         ),
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          SafeArea(
+          const SafeArea(
             child: Text(
               'Mango',
               style: TextStyle(
@@ -55,8 +55,8 @@ class _ScreenSplashState extends State<ScreenSplash> {
   }
 
   Future<void> load() async {
-    await Future.delayed(Duration(seconds: 3));
-    Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: (ctx1) => ScreenMain()));
+    await Future.delayed(const Duration(seconds: 3));
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (ctx1) => const ScreenMain()));
   }
 }

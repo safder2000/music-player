@@ -4,8 +4,8 @@ import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/mdi_light.dart';
 import 'package:iconify_flutter/icons/ph.dart';
 import 'package:animate_do/animate_do.dart';
-import 'package:music_player/screens/screen_home.dart';
-import 'package:music_player/screens/screen_main.dart';
+import 'package:music_player/screens/main_player/screen_player_old.dart';
+import 'package:music_player/screens/menu/screen_main.dart';
 
 class MiniPlayer extends StatefulWidget {
   const MiniPlayer({Key? key}) : super(key: key);
@@ -24,7 +24,7 @@ class _MiniPlayerState extends State<MiniPlayer>
     super.initState();
     controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 100),
+      duration: const Duration(milliseconds: 100),
     );
   }
 
@@ -38,12 +38,12 @@ class _MiniPlayerState extends State<MiniPlayer>
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Navigator.of(context).push(MaterialPageRoute(
-        builder: (ctx1) => ScreenHome(
-          songSub: 'Zodvik',
-          songTitle: 'Long Nights',
-        ),
-      )),
+      // onTap: () => Navigator.of(context).push(MaterialPageRoute(
+      //   builder: (ctx1) => ScreenHome(
+      //     songSub: 'Zodvik',
+      //     songTitle: 'Long Nights',
+      //   ),
+      // )),
       child: Container(
         decoration: const BoxDecoration(
           color: Colors.black45,
@@ -69,13 +69,14 @@ class _MiniPlayerState extends State<MiniPlayer>
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.93,
               child: ProgressBar(
-                progress: Duration(milliseconds: 1000),
-                buffered: Duration(milliseconds: 2000),
-                total: Duration(milliseconds: 5000),
-                progressBarColor: Color.fromARGB(255, 219, 242, 39),
-                baseBarColor: Color.fromARGB(255, 0, 0, 0).withOpacity(0.24),
+                progress: const Duration(milliseconds: 1000),
+                buffered: const Duration(milliseconds: 2000),
+                total: const Duration(milliseconds: 5000),
+                progressBarColor: const Color.fromARGB(255, 219, 242, 39),
+                baseBarColor:
+                    const Color.fromARGB(255, 0, 0, 0).withOpacity(0.24),
                 bufferedBarColor: Colors.white.withOpacity(0.24),
-                thumbColor: Color.fromARGB(0, 255, 255, 255),
+                thumbColor: const Color.fromARGB(0, 255, 255, 255),
                 barHeight: 3.0,
                 thumbRadius: 5.0,
                 timeLabelTextStyle:
@@ -119,10 +120,10 @@ class _MiniPlayerState extends State<MiniPlayer>
                       icon: AnimatedIcon(
                         icon: AnimatedIcons.play_pause,
                         progress: controller,
-                        color: Color.fromARGB(255, 219, 242, 39),
+                        color: const Color.fromARGB(255, 219, 242, 39),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 20,
                     )
                   ],

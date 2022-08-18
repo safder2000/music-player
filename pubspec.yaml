@@ -41,6 +41,10 @@ dependencies:
   liquid_progress_indicator: ^0.4.0
   animate_do: ^2.1.0
   flutter_zoom_drawer: ^3.0.3
+  on_audio_query: ^2.6.1
+  permission_handler: ^10.0.0
+  
+  assets_audio_player: ^3.0.5
 
 dev_dependencies:
   flutter_test:
@@ -79,6 +83,7 @@ flutter:
     - assets/covers/ThereForYou.jpg
     - assets/covers/LongNights.jpg
     - assets/covers/defult.jpg
+    - assets/songs/1.mp3
 
 
 
