@@ -1,3 +1,4 @@
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
@@ -9,19 +10,23 @@ import 'package:iconify_flutter/icons/carbon.dart';
 
 import 'package:music_player/screens/menu/screen_menu.dart';
 import 'package:music_player/screens/playlist/screen_playlist.dart';
+import 'package:music_player/screens/screen_splash.dart';
 
 import 'package:music_player/widgets/home_song_list_builder.dart';
 import 'package:music_player/widgets/miniplayer.dart';
 import 'package:iconify_flutter/icons/ph.dart';
 
 class ScreenHome extends StatefulWidget {
-  const ScreenHome({Key? key}) : super(key: key);
+  ScreenHome({Key? key, required this.homeBuildList}) : super(key: key);
+  List<Audio> homeBuildList = [];
 
   @override
   State<ScreenHome> createState() => ScreenHomestate();
 }
 
 class ScreenHomestate extends State<ScreenHome> {
+  //============================= Asset Audio ===================================================================
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -32,12 +37,21 @@ class ScreenHomestate extends State<ScreenHome> {
           backgroundColor: const Color.fromARGB(255, 1, 64, 64),
           // leading: IconButton(onPressed: () {}, icon: Icon(Icons.settings)),
           leading: IconButton(
-              onPressed: () => const ZoomDrawer(
-                  menuScreen: ScreenMenu(), mainScreen: ScreenHome()),
-              icon: const Iconify(
-                Ph.arrow_bend_down_right_light,
-                color: Color.fromARGB(255, 219, 242, 39),
-              )),
+            onPressed: () => ZoomDrawer(
+                menuScreen: ScreenMenu(),
+                mainScreen: ScreenHome(
+                  homeBuildList: widget.homeBuildList,
+                )),
+            icon: const Iconify(
+              Ph.list,
+              color: Color.fromARGB(255, 219, 242, 39),
+            ),
+          ),
+          title: Text(
+            'Songs',
+            style: TextStyle(
+                color: Color.fromARGB(255, 202, 212, 128), fontSize: 25),
+          ),
           actions: [
             Padding(
               padding: const EdgeInsets.only(top: 8.0, bottom: 8),
@@ -65,16 +79,16 @@ class ScreenHomestate extends State<ScreenHome> {
                         )),
                     IconButton(
                         onPressed: () {
-                          Navigator.of(context).pushReplacement(
+                          Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (ctx1) => const ScreenPlaylist(),
                             ),
                           );
                         },
                         icon: const Iconify(
-                          Zondicons.indent_increase,
+                          Zondicons.playlist,
                           color: Color.fromARGB(255, 28, 88, 77),
-                          size: 22,
+                          size: 20,
                         ))
                   ],
                 ),
@@ -114,9 +128,10 @@ class ScreenHomestate extends State<ScreenHome> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const SizedBox(
-                          height: 568, child: LocalSongListBuilder()),
-                      const MiniPlayer(),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.88,
+                          child: LocalSongListBuilder(
+                              homeBuildList: widget.homeBuildList)),
                     ],
                   ),
                 ),

@@ -69,7 +69,7 @@ class _ScreenMenuState extends State<ScreenMenu> {
                     color: Color.fromARGB(255, 1, 64, 64),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.only(top: 7.0, bottom: 7.0),
                     child: Row(
                       children: [
                         const Text(
@@ -78,7 +78,7 @@ class _ScreenMenuState extends State<ScreenMenu> {
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(
-                          width: 8,
+                          width: 0,
                         ),
                         Transform.scale(
                           scale: 0.8,

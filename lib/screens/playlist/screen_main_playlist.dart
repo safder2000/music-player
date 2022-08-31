@@ -101,7 +101,7 @@ class ScreenMainPlayliststate extends State<ScreenMainPlaylist> {
                     // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SizedBox(
-                        height: 568,
+                        height: MediaQuery.of(context).size.height * 0.794,
                         child: GlowingOverscrollIndicator(
                           axisDirection: AxisDirection.down,
                           color: const Color.fromARGB(255, 154, 109, 109),
@@ -249,7 +249,7 @@ class ScreenMainPlayliststate extends State<ScreenMainPlaylist> {
                           ),
                         ),
                       ),
-                      const MiniPlayer()
+                      // const MiniPlayer()
                     ],
                   ),
                 ),

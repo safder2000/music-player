@@ -1,31 +1,61 @@
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:iconify_flutter/iconify_flutter.dart';
-import 'package:iconify_flutter/icons/mdi_light.dart';
-import 'package:iconify_flutter/icons/ph.dart';
-import 'package:animate_do/animate_do.dart';
-import 'package:music_player/screens/main_player/screen_player_old.dart';
-import 'package:music_player/screens/menu/screen_main.dart';
+import 'package:music_player/screens/main_player/screen_main_player.dart';
+import 'package:on_audio_query/on_audio_query.dart';
+import 'dart:developer';
 
 class MiniPlayer extends StatefulWidget {
-  const MiniPlayer({Key? key}) : super(key: key);
+  MiniPlayer({
+    Key? key,
+    required this.homeBuildList,
+    required this.songIndex,
+    required this.assetsAudioPlayer,
+  }) : super(
+          key: key,
+        );
+  List<Audio> homeBuildList = [];
 
+  AssetsAudioPlayer assetsAudioPlayer;
+  // final AssetsAudioPlayer assetsAudioPlayer = AssetsAudioPlayer.withId("0");
+
+  int songIndex;
   @override
   State<MiniPlayer> createState() => _MiniPlayerState();
 }
 
 class _MiniPlayerState extends State<MiniPlayer>
     with SingleTickerProviderStateMixin {
+  int _selectedIndex = 0;
   late AnimationController controller;
   bool isPlaying = false;
+  Audio find(List<Audio> source, String fromPath) {
+    return source.firstWhere((element) => element.path == fromPath);
+  }
+
   @override
   void initState() {
+    _selectedIndex = widget.songIndex;
     // TODO: implement initState
     super.initState();
     controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 100),
     );
+    toggleIcon();
+    openPlayer();
+  }
+
+  void openPlayer() async {
+    try {
+      await widget.assetsAudioPlayer.open(
+        Playlist(audios: widget.homeBuildList, startIndex: _selectedIndex),
+        showNotification: true,
+        autoStart: true,
+      );
+    } on Exception {
+      log('fetching error......................<<<<<');
+    }
   }
 
   @override
@@ -37,16 +67,19 @@ class _MiniPlayerState extends State<MiniPlayer>
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      // onTap: () => Navigator.of(context).push(MaterialPageRoute(
-      //   builder: (ctx1) => ScreenHome(
-      //     songSub: 'Zodvik',
-      //     songTitle: 'Long Nights',
-      //   ),
-      // )),
+    return GestureDetector(
+      onTap: () => Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (ctx1) => ScreenMainPlayer(
+            // songDuration: widget.songDuration,
+            songIndex: widget.songIndex,
+            // assetsAudioPlayer: widget.assetsAudioPlayer,
+            homeBuildList: widget.homeBuildList,
+          ),
+        ),
+      ),
       child: Container(
         decoration: const BoxDecoration(
-          color: Colors.black45,
           borderRadius: BorderRadius.only(
               topRight: Radius.circular(15.0), topLeft: Radius.circular(15.0)),
           gradient: LinearGradient(
@@ -57,61 +90,87 @@ class _MiniPlayerState extends State<MiniPlayer>
               1,
             ],
             colors: [
-              Color.fromARGB(255, 38, 115, 101),
-              Color.fromARGB(0, 0, 0, 0),
+              Color.fromARGB(255, 1, 64, 64),
+              Color.fromARGB(255, 0, 0, 0),
             ],
           ),
         ),
-        height: 80,
+        height: 90,
         width: MediaQuery.of(context).size.width,
         child: Column(
           children: [
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.93,
-              child: ProgressBar(
-                progress: const Duration(milliseconds: 1000),
-                buffered: const Duration(milliseconds: 2000),
-                total: const Duration(milliseconds: 5000),
-                progressBarColor: const Color.fromARGB(255, 219, 242, 39),
-                baseBarColor:
-                    const Color.fromARGB(255, 0, 0, 0).withOpacity(0.24),
-                bufferedBarColor: Colors.white.withOpacity(0.24),
-                thumbColor: const Color.fromARGB(0, 255, 255, 255),
-                barHeight: 3.0,
-                thumbRadius: 5.0,
-                timeLabelTextStyle:
-                    const TextStyle(color: Colors.white, fontSize: 0),
+              child: widget.assetsAudioPlayer.builderRealtimePlayingInfos(
+                builder: (ctx, infos) {
+                  Duration currentPos = infos.currentPosition;
+                  Duration total = infos.duration;
+                  return ProgressBar(
+                    progress: currentPos,
+                    total: total,
+                    progressBarColor: const Color.fromARGB(255, 219, 242, 39),
+                    baseBarColor: Colors.white.withOpacity(0.24),
+                    bufferedBarColor: Colors.white.withOpacity(0.24),
+                    thumbColor: Color.fromARGB(0, 255, 255, 255),
+                    barHeight: 3.0,
+                    thumbRadius: 5.0,
+                    timeLabelTextStyle: const TextStyle(
+                      fontSize: 0,
+                      color: Colors.grey,
+                    ),
+                    onSeek: (to) {
+                      widget.assetsAudioPlayer.seek(to);
+                    },
+                  );
+                },
               ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Container(
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                        image: DecorationImage(
-                          alignment: Alignment.topCenter,
-                          image: AssetImage('assets/images/1.jpg'),
-                          fit: BoxFit.fill,
-                        ),
+                widget.assetsAudioPlayer.builderCurrent(
+                    builder: (context, Playing? playing) {
+                  final myAudio =
+                      find(widget.homeBuildList, playing!.audio.assetAudioPath);
+                  return Row(
+                    children: [
+                      const SizedBox(
+                        width: 10,
                       ),
-                      height: 60,
-                      width: 60,
-                    ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    const Text(
-                      'Long Nights',
-                      style: TextStyle(color: Colors.white, fontSize: 20),
-                    )
-                  ],
-                ),
+                      Container(
+                        // decoration: const BoxDecoration(
+                        //   borderRadius: BorderRadius.all(Radius.circular(8)),
+                        //   image: DecorationImage(
+                        //     alignment: Alignment.topCenter,
+                        //     image: AssetImage('assets/images/1.jpg'),
+                        //     fit: BoxFit.fill,
+                        //   ),
+                        // ),
+                        child: QueryArtworkWidget(
+                          id: int.parse(myAudio.metas.id!),
+                          type: ArtworkType.AUDIO,
+                          artworkBorder: BorderRadius.circular(8),
+                          nullArtworkWidget: Image(
+                            image: AssetImage('assets/images/defult.jpg'),
+                          ),
+                        ),
+                        height: 60,
+                        width: 60,
+                      ),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.5,
+                        child: Text(
+                          '${myAudio.metas.title!.isEmpty ? widget.homeBuildList[0].metas.title : myAudio.metas.title}',
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      )
+                    ],
+                  );
+                }),
                 Row(
                   children: [
                     IconButton(
@@ -139,5 +198,8 @@ class _MiniPlayerState extends State<MiniPlayer>
   void toggleIcon() => setState(() {
         isPlaying = !isPlaying;
         isPlaying ? controller.forward() : controller.reverse();
+        isPlaying
+            ? widget.assetsAudioPlayer.play()
+            : widget.assetsAudioPlayer.pause();
       });
 }

@@ -1,7 +1,14 @@
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
+import 'package:music_player/db/all_songs.dart';
+import 'package:music_player/db/functions/Boxes.dart';
 
 import 'package:music_player/screens/menu/screen_main.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+AssetsAudioPlayer assetsAudioPlayer = AssetsAudioPlayer.withId("0");
+// final AudioPlayer audioPlayer = AudioPlayer();
 
 class ScreenSplash extends StatefulWidget {
   const ScreenSplash({Key? key}) : super(key: key);
@@ -20,6 +27,54 @@ class _ScreenSplashState extends State<ScreenSplash> {
     setState(() {
       PermissionStatus;
     });
+    fetchSongs();
+  }
+
+  final _audioQuery = OnAudioQuery();
+  final box = Boxes.getAll();
+  List<SongModel> fetchedSongs = [];
+  List<AllSongs> afterMapping = [];
+  List<SongModel> fullSongs = [];
+  List<SongModel> allSongs = [];
+  List<AllSongs> audioList = [];
+  List<Audio> filterdSongs = [];
+
+  List<AllSongs> dbSongs = [];
+  fetchSongs() async {
+    fetchedSongs = await _audioQuery.querySongs();
+
+    for (var element in fetchedSongs) {
+      if (element.fileExtension == "mp3") {
+        allSongs.add(element);
+      }
+    }
+    afterMapping = fetchedSongs
+        .map(
+          (audio) => AllSongs(
+            uri: audio.uri,
+            title: audio.title,
+            artist: audio.artist,
+            id: audio.id,
+            duration: audio.duration,
+          ),
+        )
+        .toList();
+    await box.put("mainSongBox", afterMapping);
+    dbSongs = box.get("mainSongBox") as List<AllSongs>;
+
+    for (var element in dbSongs) {
+      filterdSongs.add(
+        Audio.file(
+          element.uri.toString(),
+          metas: Metas(
+              title: element.title,
+              id: element.id.toString(),
+              artist: element.artist,
+              album: element.duration!.toStringAsFixed(2)),
+        ),
+      );
+    }
+    setState(() {});
   }
 
   @override
@@ -56,7 +111,9 @@ class _ScreenSplashState extends State<ScreenSplash> {
 
   Future<void> load() async {
     await Future.delayed(const Duration(seconds: 3));
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (ctx1) => const ScreenMain()));
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (ctx1) => ScreenMain(
+              homeBuildList: filterdSongs,
+            )));
   }
 }

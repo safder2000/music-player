@@ -52,6 +52,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   hive_generator: ^1.1.3
+  build_runner: ^1.12.2
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -87,6 +88,10 @@ flutter:
     - assets/covers/LongNights.jpg
     - assets/covers/defult.jpg
     - assets/songs/1.mp3
+    - assets/songs/2.mp3
+    - assets/songs/3.mp3
+    - assets/songs/4.mp3
+    - assets/songs/5.mp3
 
 
 

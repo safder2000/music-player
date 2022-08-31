@@ -1,26 +1,32 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/carbon.dart';
 
 import 'package:music_player/screens/main_player/screen_main_player.dart';
+import 'package:music_player/screens/screen_splash.dart';
+
+import 'package:music_player/widgets/miniplayer.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 class HomeSongListTile extends StatefulWidget {
   HomeSongListTile({
     Key? key,
+    required this.homeBuildList,
     this.songDuration,
     this.songIndex,
-    required this.assetsAudioPlayer,
+    // required this.assetsAudioPlayer,
     required this.songInfo,
     this.songImg = const AssetImage('assets/images/defult.jpg'),
   }) : super(key: key);
-
+  List<Audio> homeBuildList = [];
   AssetImage songImg;
-  SongModel songInfo;
+  Audio songInfo;
   final songDuration;
   final songIndex;
-  AssetsAudioPlayer assetsAudioPlayer;
+  // AssetsAudioPlayer assetsAudioPlayer;
+  // final AssetsAudioPlayer assetsAudioPlayer = AssetsAudioPlayer.withId("0");
 
   @override
   State<HomeSongListTile> createState() => _HomeSongListTileState();
@@ -38,15 +44,13 @@ class _HomeSongListTileState extends State<HomeSongListTile> {
               Expanded(
                 child: InkWell(
                   onTap: () {
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (ctx1) => ScreenMainPlayer(
-                          songInfo: widget.songInfo,
-                          songImg: widget.songImg,
-                          // songDuration: widget.songDuration,
-                          // songIndex: widget.songIndex,
-                          assetsAudioPlayer: widget.assetsAudioPlayer,
-                        ),
+                    showBottomSheet(
+                      backgroundColor: Color.fromARGB(0, 1, 64, 64),
+                      context: context,
+                      builder: (context) => MiniPlayer(
+                        songIndex: widget.songIndex,
+                        assetsAudioPlayer: assetsAudioPlayer,
+                        homeBuildList: widget.homeBuildList,
                       ),
                     );
                   },
@@ -65,6 +69,17 @@ class _HomeSongListTileState extends State<HomeSongListTile> {
                         ),
                         height: 50,
                         width: 50,
+                        child: SizedBox(
+                          child: QueryArtworkWidget(
+                            id: int.parse(widget
+                                .homeBuildList[widget.songIndex].metas.id!),
+                            type: ArtworkType.AUDIO,
+                            artworkBorder: BorderRadius.circular(8),
+                            nullArtworkWidget: Image(
+                              image: AssetImage('assets/images/defult.jpg'),
+                            ),
+                          ),
+                        ),
                       ),
                       const SizedBox(width: 10),
                       Column(
@@ -73,7 +88,8 @@ class _HomeSongListTileState extends State<HomeSongListTile> {
                           SizedBox(
                             width: 235,
                             child: Text(
-                              widget.songInfo.title,
+                              widget
+                                  .homeBuildList[widget.songIndex].metas.title!,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
                                   color: Colors.white, fontSize: 18),
@@ -85,7 +101,7 @@ class _HomeSongListTileState extends State<HomeSongListTile> {
                           SizedBox(
                             width: 235,
                             child: Text(
-                              '${widget.songInfo.album}',
+                              '${widget.homeBuildList[widget.songIndex].metas.artist}',
                               style: const TextStyle(
                                   color: Color.fromARGB(150, 255, 255, 255),
                                   overflow: TextOverflow.ellipsis,
@@ -101,7 +117,7 @@ class _HomeSongListTileState extends State<HomeSongListTile> {
               Row(
                 children: [
                   Text(
-                    '${widget.songDuration.toStringAsFixed(2)}',
+                    '${durationCovert()}',
                     style: const TextStyle(
                         color: Color.fromARGB(150, 255, 255, 255),
                         fontSize: 13),
@@ -121,5 +137,15 @@ class _HomeSongListTileState extends State<HomeSongListTile> {
         ],
       ),
     );
+  }
+
+  durationCovert() {
+    List<String> temp =
+        double.parse('${widget.homeBuildList[widget.songIndex].metas.album}')
+            .toStringAsFixed(1)
+            .split('')
+            .sublist(0, 3);
+    String durationText = '${temp[0]}:${temp[1]}${temp[2]}';
+    return durationText;
   }
 }
