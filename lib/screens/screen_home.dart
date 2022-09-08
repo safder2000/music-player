@@ -10,6 +10,7 @@ import 'package:iconify_flutter/icons/carbon.dart';
 
 import 'package:music_player/screens/menu/screen_menu.dart';
 import 'package:music_player/screens/playlist/screen_playlist.dart';
+import 'package:music_player/screens/screen_search.dart';
 import 'package:music_player/screens/screen_splash.dart';
 
 import 'package:music_player/widgets/home_song_list_builder.dart';
@@ -66,11 +67,11 @@ class ScreenHomestate extends State<ScreenHome> {
                   children: [
                     IconButton(
                         onPressed: () {
-                          // Navigator.of(context).pushReplacement(
-                          //   MaterialPageRoute(
-                          //     builder: (ctx1) => const ScreenSearch(),
-                          //   ),
-                          // );
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (ctx1) => ScreenSearch(),
+                            ),
+                          );
                         },
                         icon: const Iconify(
                           Carbon.search,
@@ -81,7 +82,9 @@ class ScreenHomestate extends State<ScreenHome> {
                         onPressed: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (ctx1) => const ScreenPlaylist(),
+                              builder: (ctx1) => ScreenPlaylist(
+                                homeBuildList: widget.homeBuildList,
+                              ),
                             ),
                           );
                         },
@@ -129,7 +132,7 @@ class ScreenHomestate extends State<ScreenHome> {
                     // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.88,
+                          height: MediaQuery.of(context).size.height * 0.78,
                           child: LocalSongListBuilder(
                               homeBuildList: widget.homeBuildList)),
                     ],

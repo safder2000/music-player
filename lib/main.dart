@@ -10,8 +10,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Hive.registerAdapter(AllSongsAdapter());
-  await Hive.openBox<List>('allSongs_db');
-  final box = Boxes.getAll();
+  // await Hive.openBox<List>('allSongsList_db');
+  await Hive.openBox<AllSongs>('allSongs_db');
+  await Hive.openBox<List>('SongsList_db');
+  final box = Boxes.getSongs();
   Paint.enableDithering = true;
   runApp(const MusicPlayer());
   AssetsAudioPlayer.setupNotificationsOpenAction((notification) {

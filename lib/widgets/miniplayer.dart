@@ -1,7 +1,7 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:music_player/screens/main_player/screen_main_player.dart';
+import 'package:music_player/screens/screen_main_player.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'dart:developer';
 
@@ -9,24 +9,23 @@ class MiniPlayer extends StatefulWidget {
   MiniPlayer({
     Key? key,
     required this.homeBuildList,
-    required this.songIndex,
-    required this.assetsAudioPlayer,
+    // required this.songIndex,
+    // required this.assetsAudioPlayer,
   }) : super(
           key: key,
         );
   List<Audio> homeBuildList = [];
 
-  AssetsAudioPlayer assetsAudioPlayer;
-  // final AssetsAudioPlayer assetsAudioPlayer = AssetsAudioPlayer.withId("0");
+  // AssetsAudioPlayer assetsAudioPlayer;
+  final AssetsAudioPlayer assetsAudioPlayer = AssetsAudioPlayer.withId("0");
 
-  int songIndex;
+  // int songIndex;
   @override
   State<MiniPlayer> createState() => _MiniPlayerState();
 }
 
 class _MiniPlayerState extends State<MiniPlayer>
     with SingleTickerProviderStateMixin {
-  int _selectedIndex = 0;
   late AnimationController controller;
   bool isPlaying = false;
   Audio find(List<Audio> source, String fromPath) {
@@ -35,7 +34,6 @@ class _MiniPlayerState extends State<MiniPlayer>
 
   @override
   void initState() {
-    _selectedIndex = widget.songIndex;
     // TODO: implement initState
     super.initState();
     controller = AnimationController(
@@ -43,19 +41,6 @@ class _MiniPlayerState extends State<MiniPlayer>
       duration: const Duration(milliseconds: 100),
     );
     toggleIcon();
-    openPlayer();
-  }
-
-  void openPlayer() async {
-    try {
-      await widget.assetsAudioPlayer.open(
-        Playlist(audios: widget.homeBuildList, startIndex: _selectedIndex),
-        showNotification: true,
-        autoStart: true,
-      );
-    } on Exception {
-      log('fetching error......................<<<<<');
-    }
   }
 
   @override
@@ -71,9 +56,8 @@ class _MiniPlayerState extends State<MiniPlayer>
       onTap: () => Navigator.of(context).push(
         MaterialPageRoute(
           builder: (ctx1) => ScreenMainPlayer(
-            // songDuration: widget.songDuration,
-            songIndex: widget.songIndex,
-            // assetsAudioPlayer: widget.assetsAudioPlayer,
+            // songIndex: widget.songIndex,
+
             homeBuildList: widget.homeBuildList,
           ),
         ),
@@ -134,8 +118,8 @@ class _MiniPlayerState extends State<MiniPlayer>
                       find(widget.homeBuildList, playing!.audio.assetAudioPath);
                   return Row(
                     children: [
-                      const SizedBox(
-                        width: 10,
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 55,
                       ),
                       Container(
                         // decoration: const BoxDecoration(
@@ -160,13 +144,28 @@ class _MiniPlayerState extends State<MiniPlayer>
                       const SizedBox(
                         width: 20,
                       ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.5,
-                        child: Text(
-                          '${myAudio.metas.title!.isEmpty ? widget.homeBuildList[0].metas.title : myAudio.metas.title}',
-                          style: TextStyle(color: Colors.white, fontSize: 20),
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                      Column(
+                        children: [
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.5,
+                            child: Text(
+                              '${myAudio.metas.title!.isEmpty ? widget.homeBuildList[0].metas.title : myAudio.metas.title}',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 20),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.52,
+                            child: Text(
+                              ' ${myAudio.metas.title!.isEmpty ? widget.homeBuildList[0].metas.artist : myAudio.metas.artist}',
+                              style: TextStyle(
+                                  color: Color.fromARGB(157, 255, 255, 255),
+                                  fontSize: 14),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
                       )
                     ],
                   );

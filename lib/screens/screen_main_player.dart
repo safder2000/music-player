@@ -8,6 +8,7 @@ import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:iconify_flutter/icons/mdi_light.dart';
 import 'package:music_player/db/all_songs.dart';
 import 'package:music_player/db/functions/Boxes.dart';
+import 'package:music_player/db/functions/getAllSongs.dart';
 
 import 'package:music_player/screens/menu/screen_main.dart';
 import 'package:music_player/screens/playlist/screen_playlist.dart';
@@ -21,24 +22,16 @@ class ScreenMainPlayer extends StatefulWidget {
     Key? key,
     required this.homeBuildList,
 
-    // this.songDuration,
-    required this.songIndex,
-    // required this.assetsAudioPlayer,
+    // required this.songIndex,
+
     this.songImg = const AssetImage('assets/images/defult.jpg'),
   }) : super(key: key);
   List<Audio> homeBuildList = [];
 
   AssetImage songImg;
-
-  // final songDuration;
-  int songIndex;
+  // int songIndex;
   // AssetsAudioPlayer assetsAudioPlayer;
   // final AssetsAudioPlayer assetsAudioPlayer = AssetsAudioPlayer.withId("0");
-
-  // AssetsAudioPlayer assetsAudioPlayer = AssetsAudioPlayer();
-
-  // final _audioQuery = OnAudioQuery();
-
   @override
   State<ScreenMainPlayer> createState() => ScreenMainPlayerState();
 }
@@ -53,23 +46,19 @@ class ScreenMainPlayerState extends State<ScreenMainPlayer> {
     return source.firstWhere((element) => element.path == fromPath);
   }
 
-  final box = Boxes.getAll();
+  final box = Boxes.getSongs();
   List<AllSongs> dbSongs = [];
-  // Duration duration = Duration.zero;
-  // Duration position = Duration.zero;
-  void _onPrevSong(int _currentIndex) {
-    _selectedIndex = _currentIndex;
+
+  void _onPrevSong() {
+    // _selectedIndex = _currentIndex;
     setState(
       () {
-        if (_selectedIndex <= 0) {
-          _selectedIndex = (widget.homeBuildList.length) - 1;
-          // widget.assetsAudioPlayer
-          //     .open(songList[_selectedIndex], showNotification: true);
-        } else {
-          _selectedIndex = _selectedIndex - 1;
-          // widget.assetsAudioPlayer
-          //     .open(songList[_selectedIndex], showNotification: true);
-        }
+        // if (_selectedIndex <= 0) {
+        //   _selectedIndex = (widget.homeBuildList.length) - 1;
+
+        // } else {
+        //   _selectedIndex = _selectedIndex - 1;
+        // }
         assetsAudioPlayer.previous();
         assetsAudioPlayer.play();
         isPause = true;
@@ -77,19 +66,19 @@ class ScreenMainPlayerState extends State<ScreenMainPlayer> {
     );
   }
 
-  void _onNextSong(int _currentIndex) {
-    _selectedIndex = _currentIndex;
+  void _onNextSong() {
+    // _selectedIndex = _currentIndex;
     setState(
       () {
-        if (_selectedIndex >= widget.homeBuildList.length - 1) {
-          _selectedIndex = 0;
-          // widget.assetsAudioPlayer
-          //     .open(songList[_selectedIndex], showNotification: true);
-        } else {
-          // widget.assetsAudioPlayer
-          //     .open(songList[_selectedIndex + 1], showNotification: true);
-          _selectedIndex = _selectedIndex + 1;
-        }
+        // if (_selectedIndex >= widget.homeBuildList.length - 1) {
+        //   _selectedIndex = 0;
+        //   // widget.assetsAudioPlayer
+        //   //     .open(songList[_selectedIndex], showNotification: true);
+        // } else {
+        //   // widget.assetsAudioPlayer
+        //   //     .open(songList[_selectedIndex + 1], showNotification: true);
+        //   _selectedIndex = _selectedIndex + 1;
+        // }
         assetsAudioPlayer.next();
         assetsAudioPlayer.play();
         isPause = true;
@@ -97,31 +86,20 @@ class ScreenMainPlayerState extends State<ScreenMainPlayer> {
     );
   }
 
+  final songBox = Boxes.getSongs();
   @override
   void initState() {
-    _selectedIndex = widget.songIndex;
+    // _selectedIndex = widget.songIndex;
     // TODO: implement initState
 
     super.initState();
-    dbSongs = box.get('mainSongBox') as List<AllSongs>;
+    dbSongs = songBox.values.toList().cast<AllSongs>();
     // openPlayer();
   }
 
   @override
   void dispose() {
     super.dispose();
-  }
-
-  void openPlayer() async {
-    try {
-      await assetsAudioPlayer.open(
-        Playlist(audios: widget.homeBuildList, startIndex: _selectedIndex),
-        showNotification: true,
-        autoStart: true,
-      );
-    } on Exception {
-      log('fetching error......................<<<<<');
-    }
   }
 
   // playSong() async {
@@ -160,7 +138,10 @@ class ScreenMainPlayerState extends State<ScreenMainPlayer> {
                         onPressed: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (ctx1) => const ScreenPlaylist(),
+                              builder: (ctx1) => ScreenPlaylist(
+                                homeBuildList: widget.homeBuildList,
+                                // songIndex: widget.songIndex,
+                              ),
                             ),
                           );
                         },
@@ -213,7 +194,7 @@ class ScreenMainPlayerState extends State<ScreenMainPlayer> {
                           height: 10,
                         ),
                         Expanded(
-                          flex: 3,
+                          flex: 1,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -242,7 +223,7 @@ class ScreenMainPlayerState extends State<ScreenMainPlayer> {
                                     width: 200,
                                     child: Text(
                                       // '${widget.homeBuildList[_selectedIndex].metas.album}',
-                                      myAudio.metas.album!,
+                                      myAudio.metas.artist!,
                                       style: const TextStyle(
                                           color: Color.fromARGB(
                                               125, 167, 167, 167),
@@ -257,8 +238,18 @@ class ScreenMainPlayerState extends State<ScreenMainPlayer> {
                             ],
                           ),
                         ),
-                        const SizedBox(
-                          height: 80,
+                        SizedBox(
+                          height: 200,
+                          width: 200,
+                          child: QueryArtworkWidget(
+                            id: int.parse(myAudio.metas.id!),
+                            type: ArtworkType.AUDIO,
+                            artworkBorder: BorderRadius.circular(8),
+                            nullArtworkWidget: Image(
+                              image: AssetImage('assets/images/defult.jpg'),
+                            ),
+                            format: ArtworkFormat.PNG,
+                          ),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -361,7 +352,7 @@ class ScreenMainPlayerState extends State<ScreenMainPlayer> {
                               ),
                               IconButton(
                                   onPressed: () {
-                                    _onPrevSong(_selectedIndex);
+                                    _onPrevSong();
                                   }, //FaIcon(FontAwesomeIcons.gamepad),
                                   icon: const Iconify(
                                     RadixIcons.track_previous,
@@ -402,7 +393,7 @@ class ScreenMainPlayerState extends State<ScreenMainPlayer> {
                               ),
                               IconButton(
                                   onPressed: () {
-                                    _onNextSong(_selectedIndex);
+                                    _onNextSong();
                                   }, //FaIcon(FontAwesomeIcons.gamepad),
                                   icon: const Iconify(
                                     RadixIcons.track_next,

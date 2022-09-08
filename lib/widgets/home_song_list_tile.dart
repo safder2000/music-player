@@ -1,14 +1,17 @@
+import 'dart:developer';
+
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/carbon.dart';
-
-import 'package:music_player/screens/main_player/screen_main_player.dart';
-import 'package:music_player/screens/screen_splash.dart';
+import 'package:music_player/db/all_songs.dart';
+import 'package:music_player/db/functions/Boxes.dart';
+import 'package:music_player/widgets/addToFavorite.dart';
+import 'package:music_player/widgets/addToPlaylistTile.dart';
 
 import 'package:music_player/widgets/miniplayer.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:music_player/db/functions/player.dart';
 
 class HomeSongListTile extends StatefulWidget {
   HomeSongListTile({
@@ -25,6 +28,7 @@ class HomeSongListTile extends StatefulWidget {
   Audio songInfo;
   final songDuration;
   final songIndex;
+
   // AssetsAudioPlayer assetsAudioPlayer;
   // final AssetsAudioPlayer assetsAudioPlayer = AssetsAudioPlayer.withId("0");
 
@@ -33,6 +37,7 @@ class HomeSongListTile extends StatefulWidget {
 }
 
 class _HomeSongListTileState extends State<HomeSongListTile> {
+  Object? _value = 0;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -48,11 +53,13 @@ class _HomeSongListTileState extends State<HomeSongListTile> {
                       backgroundColor: Color.fromARGB(0, 1, 64, 64),
                       context: context,
                       builder: (context) => MiniPlayer(
-                        songIndex: widget.songIndex,
-                        assetsAudioPlayer: assetsAudioPlayer,
+                        // songIndex: widget.songIndex,
+                        // assetsAudioPlayer: assetsAudioPlayer,
                         homeBuildList: widget.homeBuildList,
                       ),
                     );
+
+                    openPlayer(widget.homeBuildList, widget.songIndex, context);
                   },
                   child: Row(
                     children: [
@@ -78,6 +85,7 @@ class _HomeSongListTileState extends State<HomeSongListTile> {
                             nullArtworkWidget: Image(
                               image: AssetImage('assets/images/defult.jpg'),
                             ),
+                            format: ArtworkFormat.PNG,
                           ),
                         ),
                       ),
@@ -114,20 +122,80 @@ class _HomeSongListTileState extends State<HomeSongListTile> {
                   ),
                 ),
               ),
-              Row(
-                children: [
-                  Text(
-                    '${durationCovert()}',
-                    style: const TextStyle(
-                        color: Color.fromARGB(150, 255, 255, 255),
-                        fontSize: 13),
+              PopupMenuButton<int>(
+                color: Color.fromARGB(255, 1, 64, 64),
+                onSelected: (result) {
+                  if (result == 1) {
+                    addToPlayList();
+                  }
+                  if (result == 2) {
+                    Favorite.AddToFavorite(
+                        context: context,
+                        songId:
+                            widget.homeBuildList[widget.songIndex].metas.id!);
+                  }
+                },
+                itemBuilder: (context) => [
+                  PopupMenuItem(
+                    value: 1,
+                    // row has two child icon and text
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.playlist_add,
+                          color: Color.fromARGB(255, 219, 242, 39),
+                        ),
+                        SizedBox(
+                          // sized box with width 10
+                          width: 10,
+                        ),
+                        Text(
+                          "Add to Playlist",
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 219, 242, 39),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                  const Iconify(
-                    Carbon.overflow_menu_vertical,
-                    color: Color.fromARGB(150, 255, 255, 255),
-                    size: 26,
+                  PopupMenuItem(
+                    value: 2,
+                    // row has two child icon and text
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.favorite,
+                          color: Color.fromARGB(255, 219, 242, 39),
+                        ),
+                        SizedBox(
+                          // sized box with width 10
+                          width: 10,
+                        ),
+                        Text(
+                          "Favorite",
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 219, 242, 39),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ],
+                child: Row(
+                  children: [
+                    Text(
+                      '${durationCovert()}',
+                      style: const TextStyle(
+                          color: Color.fromARGB(150, 255, 255, 255),
+                          fontSize: 13),
+                    ),
+                    const Iconify(
+                      Carbon.overflow_menu_vertical,
+                      color: Color.fromARGB(150, 255, 255, 255),
+                      size: 26,
+                    ),
+                  ],
+                ),
               )
             ],
           ),
@@ -147,5 +215,38 @@ class _HomeSongListTileState extends State<HomeSongListTile> {
             .sublist(0, 3);
     String durationText = '${temp[0]}:${temp[1]}${temp[2]}';
     return durationText;
+  }
+
+  addToPlayList() {
+    final playList = box.values.toList().cast<List>();
+    List playListName = box.keys.toList();
+    showModalBottomSheet(
+      backgroundColor: Color.fromARGB(0, 1, 64, 64),
+      context: context,
+      builder: (context) => Column(
+        children: [
+          Text(
+            'Add To Playlist',
+            style: TextStyle(
+              fontSize: 22,
+              color: Color.fromARGB(255, 219, 242, 39),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.515,
+            child: ListView.builder(
+              itemCount: playList.length,
+              itemBuilder: (BuildContext context, int index) => AddToPlayList(
+                name: playListName[index].toString(),
+                songId: widget.homeBuildList[widget.songIndex].metas.id,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

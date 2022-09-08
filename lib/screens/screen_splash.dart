@@ -1,5 +1,6 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:music_player/db/all_songs.dart';
 import 'package:music_player/db/functions/Boxes.dart';
 
@@ -31,7 +32,8 @@ class _ScreenSplashState extends State<ScreenSplash> {
   }
 
   final _audioQuery = OnAudioQuery();
-  final box = Boxes.getAll();
+  final listBox = Boxes.getList();
+  final songBox = Boxes.getSongs();
   List<SongModel> fetchedSongs = [];
   List<AllSongs> afterMapping = [];
   List<SongModel> fullSongs = [];
@@ -39,7 +41,6 @@ class _ScreenSplashState extends State<ScreenSplash> {
   List<AllSongs> audioList = [];
   List<Audio> filterdSongs = [];
 
-  List<AllSongs> dbSongs = [];
   fetchSongs() async {
     fetchedSongs = await _audioQuery.querySongs();
 
@@ -48,19 +49,28 @@ class _ScreenSplashState extends State<ScreenSplash> {
         allSongs.add(element);
       }
     }
-    afterMapping = fetchedSongs
-        .map(
-          (audio) => AllSongs(
-            uri: audio.uri,
-            title: audio.title,
-            artist: audio.artist,
-            id: audio.id,
-            duration: audio.duration,
-          ),
-        )
-        .toList();
-    await box.put("mainSongBox", afterMapping);
-    dbSongs = box.get("mainSongBox") as List<AllSongs>;
+//change
+    for (var audio in fetchedSongs) {
+      final temp = AllSongs(
+        uri: audio.uri,
+        title: audio.title,
+        artist: audio.artist,
+        id: audio.id,
+        duration: audio.duration,
+      );
+      // afterMapping.add(temp);
+      await songBox.put(audio.id, temp);
+      List<dynamic> favKeys = listBox.keys.toList();
+      if (!favKeys.contains("favorite")) {
+        List<dynamic> likedSongs = [];
+        await listBox.put("favorite", likedSongs);
+      }
+    }
+    // await listBox.put("mainSongListBox", afterMapping);
+
+    // changes
+    List<AllSongs> dbSongs = songBox.values.toList().cast<AllSongs>();
+    // List<AllSongs> dbSongs = listBox.get("mainSongListBox") as List<AllSongs>;
 
     for (var element in dbSongs) {
       filterdSongs.add(
@@ -74,7 +84,7 @@ class _ScreenSplashState extends State<ScreenSplash> {
         ),
       );
     }
-    setState(() {});
+    // setState(() {});
   }
 
   @override
@@ -110,7 +120,7 @@ class _ScreenSplashState extends State<ScreenSplash> {
   }
 
   Future<void> load() async {
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 2));
     Navigator.of(context).pushReplacement(MaterialPageRoute(
         builder: (ctx1) => ScreenMain(
               homeBuildList: filterdSongs,

@@ -2,10 +2,10 @@ import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:music_player/main.dart';
-import 'package:music_player/screens/main_player/screen_main_player.dart';
+import 'package:music_player/screens/screen_main_player.dart';
 import 'package:music_player/screens/screen_splash.dart';
 import 'package:music_player/widgets/home_song_list_tile.dart';
-import 'package:music_player/widgets/home_tile_asset.dart';
+
 import 'package:music_player/widgets/song_list.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
