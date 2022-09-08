@@ -13,6 +13,7 @@ import 'package:music_player/db/functions/getAllSongs.dart';
 import 'package:music_player/screens/menu/screen_main.dart';
 import 'package:music_player/screens/playlist/screen_playlist.dart';
 import 'package:music_player/screens/screen_splash.dart';
+import 'package:music_player/widgets/addToFavorite.dart';
 import 'package:music_player/widgets/song_list.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
@@ -47,6 +48,8 @@ class ScreenMainPlayerState extends State<ScreenMainPlayer> {
   }
 
   final box = Boxes.getSongs();
+  final boxList = Boxes.getList();
+
   List<AllSongs> dbSongs = [];
 
   void _onPrevSong() {
@@ -86,6 +89,32 @@ class ScreenMainPlayerState extends State<ScreenMainPlayer> {
     );
   }
 
+  Icon isThisFavorate(String songId) {
+    Icon tempIco;
+    List? favourites = boxList.get("favorite");
+    final temp = findSong(dbSongs, songId);
+    favourites!
+            .where((element) => element.id.toString() == temp.id.toString())
+            .isEmpty
+        ? tempIco = Icon(
+            Icons.favorite,
+            color: Color.fromARGB(255, 255, 234, 234),
+            size: 30,
+          )
+        : tempIco = Icon(
+            Icons.favorite,
+            color: Color.fromARGB(255, 219, 242, 39),
+            size: 30,
+          );
+    return tempIco;
+  }
+
+  AllSongs findSong(List<AllSongs> songs, String id) {
+    return songs.firstWhere(
+      (element) => element.id.toString().contains(id),
+    );
+  }
+
   final songBox = Boxes.getSongs();
   @override
   void initState() {
@@ -94,6 +123,7 @@ class ScreenMainPlayerState extends State<ScreenMainPlayer> {
 
     super.initState();
     dbSongs = songBox.values.toList().cast<AllSongs>();
+
     // openPlayer();
   }
 
@@ -293,23 +323,14 @@ class ScreenMainPlayerState extends State<ScreenMainPlayer> {
                               padding: const EdgeInsets.all(10.0),
                               child: IconButton(
                                   onPressed: () {
+                                    Favorite.AddToFavorite(
+                                        context: context,
+                                        songId: myAudio.metas.id!);
                                     setState(() {
-                                      isFavorate = !isFavorate;
+                                      isFavorate;
                                     });
                                   },
-                                  icon: isFavorate == true
-                                      ? const Icon(
-                                          Icons.favorite,
-                                          color: Color.fromARGB(
-                                              255, 255, 234, 234),
-                                          size: 30,
-                                        )
-                                      : const Icon(
-                                          Icons.favorite,
-                                          color:
-                                              Color.fromARGB(255, 219, 242, 39),
-                                          size: 30,
-                                        )),
+                                  icon: isThisFavorate(myAudio.metas.id!)),
                             ),
                           ],
                         ),

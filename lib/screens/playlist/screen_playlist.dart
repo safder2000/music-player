@@ -351,11 +351,6 @@ class _ScreenPlaylistState extends State<ScreenPlaylist> {
                                       String title = keys[index];
 
                                       return PlayListTile(
-                                        icon: Icon(
-                                          Icons.timelapse,
-                                          color:
-                                              Color.fromARGB(255, 93, 114, 22),
-                                        ),
                                         name: title,
                                         index: index,
                                       );

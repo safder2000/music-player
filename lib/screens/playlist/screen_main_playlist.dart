@@ -276,13 +276,15 @@ class ScreenMainPlayliststate extends State<ScreenMainPlaylist> {
     showModalBottomSheet(
       backgroundColor: Color.fromARGB(0, 1, 64, 64),
       context: context,
-      builder: (context) => Column(
+      builder: (context) => ListView(
         children: [
-          Text(
-            'Add To Playlist',
-            style: TextStyle(
-              fontSize: 22,
-              color: Color.fromARGB(255, 219, 242, 39),
+          Center(
+            child: Text(
+              'Add To Playlist',
+              style: TextStyle(
+                fontSize: 22,
+                color: Color.fromARGB(255, 219, 242, 39),
+              ),
             ),
           ),
           SizedBox(
