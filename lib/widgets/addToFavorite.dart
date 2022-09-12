@@ -21,11 +21,42 @@ class Favorite {
     favourites!
             .where((element) => element.id.toString() == temp.id.toString())
             .isEmpty
-        ? addToPlaylist(temp, favourites, context)
-        : removeFromPlaylist(temp, favourites, context);
+        ? addToFavorite(temp, favourites, context)
+        : removeFromFavorite(temp, favourites, context);
   }
 
-  static removeFromPlaylist(AllSongs song, List? playlist, context) async {
+  static AddSongToPlaylist(
+      {required String name, required String songId, required final context}) {
+    List? playlist = box.get(name);
+    final songBox = Boxes.getSongs();
+    List<AllSongs> dbSongs = songBox.values.toList().cast<AllSongs>();
+    final temp = findSong(dbSongs, songId!);
+    playlist!
+            .where((element) => element.id.toString() == temp.id.toString())
+            .isEmpty
+        ? addToPlaylist(temp, playlist, name, context)
+        : alreadyExist(temp, context);
+  }
+
+  static addToPlaylist(
+      AllSongs song, List? playlist, String name, final context) async {
+    playlist?.add(song);
+    await box.put(name, playlist!);
+    Navigator.pop(context);
+
+    showSnackbar(song, 'added to the playlist',
+        Color.fromARGB(255, 219, 242, 39), context);
+
+    log('added ${song.title}');
+  }
+
+  static alreadyExist(temp, context) {
+    showSnackbar(temp, 'already in the playlist',
+        Color.fromARGB(255, 219, 242, 39), context);
+    Navigator.pop(context);
+  }
+
+  static removeFromFavorite(AllSongs song, List? playlist, context) async {
     playlist!
         .removeWhere((element) => element.id.toString() == song.id.toString());
     await box.put("favorite", playlist);
@@ -35,7 +66,7 @@ class Favorite {
     log('removed');
   }
 
-  static addToPlaylist(AllSongs song, List? playlist, context) async {
+  static addToFavorite(AllSongs song, List? playlist, context) async {
     playlist?.add(song);
     await box.put("favorite", playlist!);
     showSnackbar(

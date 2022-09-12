@@ -117,6 +117,7 @@ class _AddToPlayListState extends State<AddToPlayList> {
     playlist?.add(song);
     await box.put(widget.name, playlist!);
     Navigator.pop(context);
+
     showSnackbar(song, 'added to the playlist');
 
     log('added ${song.title}');

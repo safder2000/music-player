@@ -7,6 +7,7 @@ import 'package:music_player/db/all_songs.dart';
 import 'package:music_player/db/functions/Boxes.dart';
 import 'package:music_player/db/functions/getAllSongs.dart';
 import 'package:music_player/db/functions/player.dart';
+import 'package:music_player/widgets/addToPlaylistSongTile.dart';
 import 'package:music_player/widgets/home_song_list_builder.dart';
 
 import 'package:music_player/widgets/miniplayer.dart';
@@ -212,14 +213,14 @@ class ScreenMainPlayliststate extends State<ScreenMainPlaylist> {
                                         const SizedBox(
                                           width: 5,
                                         ),
-                                        IconButton(
-                                            onPressed: () {},
-                                            icon: const Iconify(
-                                              Carbon.repeat,
-                                              color: Color.fromARGB(
-                                                  255, 218, 242, 39),
-                                              size: 22,
-                                            ))
+                                        // IconButton(
+                                        //     onPressed: () {},
+                                        //     icon: const Iconify(
+                                        //       Carbon.repeat,
+                                        //       color: Color.fromARGB(
+                                        //           255, 218, 242, 39),
+                                        //       size: 22,
+                                        //     ))
                                       ],
                                     ),
                                   ),
@@ -292,8 +293,9 @@ class ScreenMainPlayliststate extends State<ScreenMainPlaylist> {
           ),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.515,
-            child: LocalSongListBuilder(
+            child: AddToPlalistTileBuilder(
               homeBuildList: allSongs,
+              playlistName: widget.playlistName!,
             ),
           ),
         ],

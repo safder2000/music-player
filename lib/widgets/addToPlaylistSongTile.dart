@@ -12,23 +12,59 @@ import 'package:music_player/widgets/addToPlaylistTile.dart';
 import 'package:music_player/widgets/miniplayer.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:music_player/db/functions/player.dart';
+import 'package:assets_audio_player/assets_audio_player.dart';
 
-class HomeSongListTile extends StatefulWidget {
-  HomeSongListTile({
+import 'package:flutter/material.dart';
+
+import 'package:music_player/widgets/home_song_list_tile.dart';
+
+import 'package:on_audio_query/on_audio_query.dart';
+
+class AddToPlalistTileBuilder extends StatefulWidget {
+  List<Audio> homeBuildList = [];
+  String playlistName;
+  AddToPlalistTileBuilder(
+      {Key? key, required this.homeBuildList, required this.playlistName})
+      : super(key: key);
+
+  @override
+  State<AddToPlalistTileBuilder> createState() =>
+      _AddToPlalistTileBuilderState();
+}
+
+class _AddToPlalistTileBuilderState extends State<AddToPlalistTileBuilder> {
+  final _audioQuery = OnAudioQuery();
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemBuilder: (context, index) => SongTile(
+        homeBuildList: widget.homeBuildList,
+        songIndex: index,
+        playlistName: widget.playlistName,
+      ),
+      itemCount: widget.homeBuildList.length,
+    );
+  }
+}
+
+class SongTile extends StatefulWidget {
+  SongTile({
     Key? key,
     required this.homeBuildList,
+    required this.playlistName,
     this.songIndex,
     this.songImg = const AssetImage('assets/images/defult.jpg'),
   }) : super(key: key);
   List<Audio> homeBuildList = [];
   AssetImage songImg;
   final songIndex;
+  String playlistName;
 
   @override
-  State<HomeSongListTile> createState() => _HomeSongListTileState();
+  State<SongTile> createState() => _SongTileState();
 }
 
-class _HomeSongListTileState extends State<HomeSongListTile> {
+class _SongTileState extends State<SongTile> {
   Object? _value = 0;
   @override
   Widget build(BuildContext context) {
@@ -41,17 +77,7 @@ class _HomeSongListTileState extends State<HomeSongListTile> {
               Expanded(
                 child: InkWell(
                   onTap: () {
-                    showBottomSheet(
-                      backgroundColor: Color.fromARGB(0, 1, 64, 64),
-                      context: context,
-                      builder: (context) => MiniPlayer(
-                        // songIndex: widget.songIndex,
-                        // assetsAudioPlayer: assetsAudioPlayer,
-                        homeBuildList: widget.homeBuildList,
-                      ),
-                    );
-
-                    openPlayer(widget.homeBuildList, widget.songIndex, context);
+                    addToPlayList();
                   },
                   child: Row(
                     children: [
@@ -114,81 +140,6 @@ class _HomeSongListTileState extends State<HomeSongListTile> {
                   ),
                 ),
               ),
-              PopupMenuButton<int>(
-                color: Color.fromARGB(255, 1, 64, 64),
-                onSelected: (result) {
-                  if (result == 1) {
-                    addToPlayList();
-                  }
-                  if (result == 2) {
-                    Favorite.AddToFavorite(
-                        context: context,
-                        songId:
-                            widget.homeBuildList[widget.songIndex].metas.id!);
-                  }
-                },
-                itemBuilder: (context) => [
-                  PopupMenuItem(
-                    value: 1,
-                    // row has two child icon and text
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.playlist_add,
-                          color: Color.fromARGB(255, 219, 242, 39),
-                        ),
-                        SizedBox(
-                          // sized box with width 10
-                          width: 10,
-                        ),
-                        Text(
-                          "Add to Playlist",
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 219, 242, 39),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: 2,
-                    // row has two child icon and text
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.favorite,
-                          color: Color.fromARGB(255, 219, 242, 39),
-                        ),
-                        SizedBox(
-                          // sized box with width 10
-                          width: 10,
-                        ),
-                        Text(
-                          "Favorite",
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 219, 242, 39),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-                child: Row(
-                  children: [
-                    Text(
-                      '${durationCovert()}',
-                      style: const TextStyle(
-                          color: Color.fromARGB(150, 255, 255, 255),
-                          fontSize: 13),
-                    ),
-                    const Iconify(
-                      Carbon.overflow_menu_vertical,
-                      color: Color.fromARGB(150, 255, 255, 255),
-                      size: 26,
-                    ),
-                  ],
-                ),
-              )
             ],
           ),
           const Divider(
@@ -211,34 +162,22 @@ class _HomeSongListTileState extends State<HomeSongListTile> {
 
   addToPlayList() {
     final playList = box.values.toList().cast<List>();
-    List playListName = box.keys.toList();
-    showModalBottomSheet(
-      backgroundColor: Color.fromARGB(0, 1, 64, 64),
-      context: context,
-      builder: (context) => Column(
-        children: [
-          Text(
-            'Add To Playlist',
-            style: TextStyle(
-              fontSize: 22,
-              color: Color.fromARGB(255, 219, 242, 39),
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.515,
-            child: ListView.builder(
-              itemCount: playList.length,
-              itemBuilder: (BuildContext context, int index) => AddToPlayList(
-                name: playListName[index].toString(),
-                songId: widget.homeBuildList[widget.songIndex].metas.id,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+
+    if (widget.playlistName == "favorite") {
+      Favorite.AddToFavorite(
+        context: context,
+        songId: widget.homeBuildList[widget.songIndex].metas.id!,
+      );
+      Navigator.pop(context);
+    }
+    if (widget.playlistName != "favorite") {
+      Favorite.AddSongToPlaylist(
+        name: widget.playlistName,
+        songId: widget.homeBuildList[widget.songIndex].metas.id!,
+        context: context,
+      );
+      setState(() {});
+      Navigator.pop(context);
+    }
   }
 }
