@@ -59,6 +59,7 @@ class ScreenSearchstate extends State<ScreenSearch> {
                       // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             IconButton(
                               icon: const Iconify(
@@ -102,7 +103,7 @@ class ScreenSearchstate extends State<ScreenSearch> {
                                         child: TextField(
                                           controller: searchController,
                                           decoration: InputDecoration(
-                                              hintText: 'Enter a message',
+                                              hintText: 'Song title',
                                               suffixIcon: IconButton(
                                                 onPressed:
                                                     searchController.clear,

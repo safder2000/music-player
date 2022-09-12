@@ -8,6 +8,7 @@ import 'package:music_player/db/all_songs.dart';
 import 'package:music_player/db/functions/Boxes.dart';
 import 'package:music_player/widgets/addToFavorite.dart';
 import 'package:music_player/widgets/addToPlaylistTile.dart';
+import 'package:music_player/widgets/addToRecent.dart';
 
 import 'package:music_player/widgets/miniplayer.dart';
 import 'package:on_audio_query/on_audio_query.dart';
@@ -50,6 +51,9 @@ class _HomeSongListTileState extends State<HomeSongListTile> {
                         homeBuildList: widget.homeBuildList,
                       ),
                     );
+                    Recent.AddToRecent(
+                        songId:
+                            widget.homeBuildList[widget.songIndex].metas.id!);
 
                     openPlayer(widget.homeBuildList, widget.songIndex, context);
                   },

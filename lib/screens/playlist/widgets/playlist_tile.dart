@@ -39,12 +39,15 @@ class _PlayListTileState extends State<PlayListTile> {
     if (widget.name == "favorite") {
       temp = Icon(Icons.favorite);
     }
+    if (widget.name == "recent") {
+      temp = Icon(Icons.timelapse);
+    }
     return temp;
   }
 
   bool editable() {
     bool temp = true;
-    if (widget.name == "favorite") {
+    if (widget.name == "favorite" || widget.name == "recent") {
       temp = false;
     }
     return temp;
@@ -187,108 +190,6 @@ class _PlayListTileState extends State<PlayListTile> {
     );
   }
 
-  // renamePlaylist() {
-  //   showDialog(
-  //       context: context,
-  //       builder: (BuildContext context) {
-  //         return AlertDialog(
-  //           backgroundColor: const Color.fromARGB(255, 219, 242, 39),
-  //           scrollable: true,
-  //           // title: Text(
-  //           //   'Recent',
-  //           //   style: TextStyle(
-  //           //       color: Color.fromARGB(
-  //           //           255, 1, 64, 64),
-  //           //       fontSize: 25),
-  //           // ),
-  //           actions: [
-  //             SizedBox(
-  //               height: 20,
-  //               width: 10,
-  //             ),
-  //             Form(
-  //               key: formkey,
-  //               child: TextFormField(
-  //                 initialValue: widget.name,
-  //                 cursorHeight: 25,
-  //                 decoration: const InputDecoration(
-  //                   enabledBorder: UnderlineInputBorder(
-  //                     borderSide: BorderSide(color: Colors.white),
-  //                   ),
-  //                 ),
-  //                 style: const TextStyle(
-  //                   color: Colors.white,
-  //                   fontSize: 20,
-  //                 ),
-  //                 onChanged: (value) {
-  //                   _title = value.trim();
-  //                 },
-  //                 validator: (value) {
-  //                   List keys = _box.keys.toList();
-  //                   if (value!.trim() == "") {
-  //                     return "name Required";
-  //                   }
-  //                   if (keys
-  //                       .where((element) => element == value.trim())
-  //                       .isNotEmpty) {
-  //                     return "this name already exits";
-  //                   }
-  //                   return null;
-  //                 },
-  //               ),
-  //             ),
-  //             SizedBox(
-  //               height: 20,
-  //               width: 10,
-  //             ),
-  //             Row(
-  //               mainAxisAlignment: MainAxisAlignment.end,
-  //               children: [
-  //                 InkWell(
-  //                   onTap: (() => Navigator.pop(context)),
-  //                   child: Container(
-  //                     decoration: const BoxDecoration(
-  //                       color: Color.fromARGB(255, 1, 64, 64),
-  //                       borderRadius: BorderRadius.all(
-  //                         Radius.circular(50),
-  //                       ),
-  //                     ),
-  //                     child: const Padding(
-  //                       padding: EdgeInsets.all(15.0),
-  //                       child: Icon(
-  //                         Icons.close,
-  //                         color: Color.fromARGB(255, 219, 242, 39),
-  //                         size: 30,
-  //                       ),
-  //                     ),
-  //                   ),
-  //                 ),
-  //                 SizedBox(
-  //                   width: 10,
-  //                 ),
-  //                 Container(
-  //                   decoration: const BoxDecoration(
-  //                     color: Color.fromARGB(255, 1, 64, 64),
-  //                     borderRadius: BorderRadius.all(
-  //                       Radius.circular(50),
-  //                     ),
-  //                   ),
-  //                   child: const Padding(
-  //                     padding: EdgeInsets.all(15.0),
-  //                     child: Icon(
-  //                       Icons.save,
-  //                       color: Color.fromARGB(255, 219, 242, 39),
-  //                       size: 32,
-  //                     ),
-  //                   ),
-  //                 ),
-  //               ],
-  //             )
-  //           ],
-  //         );
-  //       });
-  // }
-
   deleteConfirm() {
     showDialog(
         context: context,
@@ -296,26 +197,6 @@ class _PlayListTileState extends State<PlayListTile> {
           return AlertDialog(
             backgroundColor: const Color.fromARGB(255, 219, 242, 39),
             scrollable: true,
-            // content: Padding(
-            //   padding: const EdgeInsets.all(8.0),
-            //   child: Form(
-            //     child: Column(
-            //       children: <Widget>[
-            //         TextFormField(
-            //           decoration: const InputDecoration(
-            //             hintText: 'AR rahman',
-            //             hintStyle: TextStyle(
-            //                 color: Color.fromARGB(255, 1, 64, 64),
-            //                 fontSize: 30),
-            //             labelStyle: TextStyle(
-            //               color: Color.fromARGB(255, 1, 64, 64),
-            //             ),
-            //           ),
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
             title: Text(
               "Delete ' ${keys[widget.index]} ' ?",
               style: TextStyle(

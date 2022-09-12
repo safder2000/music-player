@@ -49,7 +49,7 @@ class ScreenHomestate extends State<ScreenHome> {
             ),
           ),
           title: Text(
-            'Songs',
+            'All Songs',
             style: TextStyle(
                 color: Color.fromARGB(255, 202, 212, 128), fontSize: 25),
           ),
@@ -129,10 +129,9 @@ class ScreenHomestate extends State<ScreenHome> {
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.78,
+                          height: MediaQuery.of(context).size.height * 0.88,
                           child: LocalSongListBuilder(
                               homeBuildList: widget.homeBuildList)),
                     ],

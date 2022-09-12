@@ -159,18 +159,9 @@ class ScreenMainPlayliststate extends State<ScreenMainPlaylist> {
                                         )),
                                     child: InkWell(
                                       onTap: () {
-                                        showModalBottomSheet(
-                                          backgroundColor:
-                                              Color.fromARGB(0, 1, 64, 64),
-                                          context: context,
-                                          builder: (context) => MiniPlayer(
-                                            // songIndex: widget.songIndex,
-                                            // assetsAudioPlayer: assetsAudioPlayer,
-                                            homeBuildList: playlistSongs,
-                                          ),
-                                        );
-
-                                        openPlayer(playlistSongs, 0, context);
+                                        playlistSongs.isEmpty
+                                            ? EmptyPlaylist()
+                                            : PlayAll();
                                       },
                                       child: Row(
                                         children: [
@@ -275,10 +266,13 @@ class ScreenMainPlayliststate extends State<ScreenMainPlaylist> {
   ShowAllSongs() {
     List<Audio> allSongs = GetAll.getAllAudio();
     showModalBottomSheet(
-      backgroundColor: Color.fromARGB(0, 1, 64, 64),
+      backgroundColor: Color.fromARGB(255, 1, 64, 64),
       context: context,
       builder: (context) => ListView(
         children: [
+          SizedBox(
+            height: 20,
+          ),
           Center(
             child: Text(
               'Add To Playlist',
@@ -289,7 +283,7 @@ class ScreenMainPlayliststate extends State<ScreenMainPlaylist> {
             ),
           ),
           SizedBox(
-            height: 10,
+            height: 20,
           ),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.515,
@@ -301,5 +295,36 @@ class ScreenMainPlayliststate extends State<ScreenMainPlaylist> {
         ],
       ),
     );
+  }
+
+  EmptyPlaylist() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+        ),
+        duration: Duration(seconds: 2),
+        backgroundColor: Colors.red,
+        content: Text('Add some songs to the playlist',
+            style: TextStyle(
+              color: Color.fromARGB(255, 255, 255, 92),
+            )),
+      ),
+    );
+  }
+
+  PlayAll() {
+    showModalBottomSheet(
+      backgroundColor: Color.fromARGB(0, 1, 64, 64),
+      context: context,
+      builder: (context) => MiniPlayer(
+        // songIndex: widget.songIndex,
+        // assetsAudioPlayer: assetsAudioPlayer,
+        homeBuildList: playlistSongs,
+      ),
+    );
+
+    openPlayer(playlistSongs, 0, context);
   }
 }

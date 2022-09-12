@@ -192,10 +192,10 @@ class _PlaylistSongTileState extends State<PlaylistSongTile> {
     List<AllSongs> dbSongs = songBox.values.toList().cast<AllSongs>();
     List? thisList = Listbox.get(widget.playlistName);
 
-    final tempSong =
+    final temp =
         databaseSongs(dbSongs, widget.homeBuildList[widget.index].metas.id!);
-    thisList!.removeWhere(
-        (element) => element.id.toString() == tempSong.id.toString());
+    thisList!
+        .removeWhere((element) => element.id.toString() == temp.id.toString());
     await box.put(widget.playlistName!, thisList);
     // final playList = box.values.toList().cast<List>();
     // List playListName = box.keys.toList();

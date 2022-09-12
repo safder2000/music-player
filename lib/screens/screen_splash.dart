@@ -65,6 +65,10 @@ class _ScreenSplashState extends State<ScreenSplash> {
         List<dynamic> likedSongs = [];
         await listBox.put("favorite", likedSongs);
       }
+      if (!favKeys.contains("recent")) {
+        List<dynamic> recentlyPlayed = [];
+        await listBox.put("recent", recentlyPlayed);
+      }
     }
     // await listBox.put("mainSongListBox", afterMapping);
 
