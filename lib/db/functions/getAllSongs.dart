@@ -5,7 +5,9 @@ import 'package:music_player/db/functions/Boxes.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
 List<AllSongs> dbSongs = songBox.values.toList().cast<AllSongs>();
+
 final songBox = Boxes.getSongs();
+
 List<SongModel> fetchedSongs = [];
 List<Audio> filterdSongs = [];
 
@@ -25,6 +27,26 @@ class GetAll {
       );
     }
     return filterdSongs;
+  }
+
+  static List<Audio> getPlaylist({required String playlistName}) {
+    List<Audio> playlist = [];
+    var listBox = Boxes.getList();
+    List<AllSongs> playlistSong = listBox.get(playlistName)!.cast<AllSongs>();
+
+    for (var element in playlistSong) {
+      playlist.add(
+        Audio.file(
+          element.uri.toString(),
+          metas: Metas(
+              title: element.title,
+              id: element.id.toString(),
+              artist: element.artist,
+              album: element.duration!.toStringAsFixed(2)),
+        ),
+      );
+    }
+    return playlist;
   }
 
   static QueryArtworkWidget ArtImage({required songId}) {

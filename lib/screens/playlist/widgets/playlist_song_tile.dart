@@ -6,6 +6,7 @@ import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/carbon.dart';
 import 'package:music_player/db/all_songs.dart';
 import 'package:music_player/db/functions/Boxes.dart';
+import 'package:music_player/db/functions/getAllSongs.dart';
 import 'package:music_player/widgets/addToPlaylistTile.dart';
 
 import 'package:music_player/widgets/miniplayer.dart';
@@ -24,7 +25,6 @@ class PlaylistSongTile extends StatefulWidget {
   List<Audio> homeBuildList = [];
   AssetImage songImg;
   String? playlistName;
-
   final index;
 
   // AssetsAudioPlayer assetsAudioPlayer;
@@ -199,7 +199,10 @@ class _PlaylistSongTileState extends State<PlaylistSongTile> {
     await box.put(widget.playlistName!, thisList);
     // final playList = box.values.toList().cast<List>();
     // List playListName = box.keys.toList();
-    setState(() {});
+    setState(() {
+      widget.homeBuildList =
+          GetAll.getPlaylist(playlistName: widget.playlistName!);
+    });
   }
 
   AllSongs databaseSongs(List<AllSongs> songs, String id) {

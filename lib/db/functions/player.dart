@@ -20,6 +20,16 @@ Audio find(List<Audio> source, String fromPath) {
   return source.firstWhere((element) => element.path == fromPath);
 }
 
+bool toggleNotification({required bool isNotificationOn}) {
+  bool temp;
+  isNotificationOn
+      ? assetsAudioPlayer.showNotification = true
+      : assetsAudioPlayer.showNotification = false;
+  assetsAudioPlayer.showNotification ? temp = true : temp = false;
+
+  return temp;
+}
+
 void openPlayer(
   List<Audio> playingList,
   songIndex,
@@ -30,7 +40,6 @@ void openPlayer(
   try {
     await assetsAudioPlayer.open(
       Playlist(audios: playingList, startIndex: songIndex),
-      showNotification: true,
       autoStart: true,
     );
   } on Exception {

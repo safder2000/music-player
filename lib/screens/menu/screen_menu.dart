@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:music_player/db/functions/player.dart';
 
 import 'package:music_player/screens/menu/screen_about.dart';
 import 'package:music_player/screens/menu/screen_nerdy.dart';
@@ -42,7 +43,7 @@ class _ScreenMenuState extends State<ScreenMenu> {
                   height: 20,
                 ),
                 Container(
-                  width: 156,
+                  width: 186,
                   height: 60,
                   decoration: const BoxDecoration(
                     borderRadius: BorderRadius.only(
@@ -88,8 +89,11 @@ class _ScreenMenuState extends State<ScreenMenu> {
                                 const Color.fromARGB(255, 219, 242, 39),
                             value: _switchValue,
                             onChanged: (value) {
+                              bool temp = value;
+                              temp =
+                                  toggleNotification(isNotificationOn: value);
                               setState(() {
-                                _switchValue = value;
+                                _switchValue = temp;
                               });
                             },
                           ),

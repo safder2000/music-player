@@ -7,13 +7,12 @@ class ScreenAbout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(
-            child: Text(
+        title: Text(
           'About',
           style: TextStyle(
             color: Color.fromARGB(93, 247, 247, 247),
           ),
-        )),
+        ),
         backgroundColor: const Color.fromARGB(255, 1, 64, 64),
       ),
       body: Container(

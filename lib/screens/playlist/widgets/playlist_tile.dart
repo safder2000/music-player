@@ -66,7 +66,7 @@ class _PlayListTileState extends State<PlayListTile> {
         onTap: () => Navigator.of(context).push(
           MaterialPageRoute(
             builder: (ctx1) => ScreenMainPlaylist(
-                playlist: playlist, playlistName: keys[widget.index]),
+                playlist: playlist, playlistName: widget.name),
           ),
         ),
         child: Container(
@@ -110,7 +110,7 @@ class _PlayListTileState extends State<PlayListTile> {
                 ],
               ),
               Visibility(
-                visible: editable()!,
+                visible: editable(),
                 child: Padding(
                   padding: const EdgeInsets.only(right: 13.0),
                   child: PopupMenuButton<int>(

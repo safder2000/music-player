@@ -46,6 +46,7 @@ dependencies:
   assets_audio_player: ^3.0.5
   hive: ^2.2.3
   hive_flutter: ^1.1.0
+  flutter_launcher_icons: ^0.10.0
 
 dev_dependencies:
 
@@ -53,6 +54,21 @@ dev_dependencies:
     sdk: flutter
   hive_generator: ^1.1.3
   build_runner: ^1.12.2
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/mango.jpg"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: "path/to/image.png"
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
+  windows:
+    generate: true
+    image_path: "path/to/image.png"
+    icon_size: 48 # min:48, max:256, default: 48
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
