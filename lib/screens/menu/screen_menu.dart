@@ -42,23 +42,23 @@ class _ScreenMenuState extends State<ScreenMenu> {
                 const SizedBox(
                   height: 20,
                 ),
-                Container(
-                  width: 186,
-                  height: 60,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(50),
-                        bottomRight: Radius.circular(50)),
-                    color: Color.fromARGB(255, 1, 64, 64),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      'Customize',
-                      style: TextStyle(color: Colors.white, fontSize: 30),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
+                // Container(
+                //   width: 186,
+                //   height: 60,
+                //   decoration: const BoxDecoration(
+                //     borderRadius: BorderRadius.only(
+                //         topRight: Radius.circular(50),
+                //         bottomRight: Radius.circular(50)),
+                //     color: Color.fromARGB(255, 1, 64, 64),
+                //   ),
+                //   child: const Center(
+                //     child: Text(
+                //       'Customize',
+                //       style: TextStyle(color: Colors.white, fontSize: 30),
+                //       textAlign: TextAlign.center,
+                //     ),
+                //   ),
+                // ),
                 const SizedBox(
                   height: 10,
                 ),
@@ -90,8 +90,8 @@ class _ScreenMenuState extends State<ScreenMenu> {
                             value: _switchValue,
                             onChanged: (value) {
                               bool temp = value;
-                              temp =
-                                  toggleNotification(isNotificationOn: value);
+                              temp = Player.toggleNotification(
+                                  isNotificationOn: value);
                               setState(() {
                                 _switchValue = temp;
                               });
@@ -164,6 +164,15 @@ class _ScreenMenuState extends State<ScreenMenu> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    const Text(
+                      'Mango',
+                      style: TextStyle(
+                          color: Color.fromARGB(60, 0, 0, 0), fontSize: 40),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height / 30,
+                    ),
                     const Text(
                       'version',
                       style: TextStyle(

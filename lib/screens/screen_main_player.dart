@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:iconify_flutter/iconify_flutter.dart'; // For Iconify Widget
-
+import 'package:text_scroll/text_scroll.dart';
 import 'package:iconify_flutter/icons/radix_icons.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:iconify_flutter/icons/mdi_light.dart';
@@ -41,6 +41,7 @@ class ScreenMainPlayerState extends State<ScreenMainPlayer> {
   bool isFavorate = true;
 
   bool isRepeat = true;
+  bool isShuffle = true;
   bool isPause = true;
   int _selectedIndex = 0;
   Audio find(List<Audio> source, String fromPath) {
@@ -204,7 +205,7 @@ class ScreenMainPlayerState extends State<ScreenMainPlayer> {
                         0.7,
                       ],
                       colors: [
-                        Color.fromARGB(255, 0, 0, 0),
+                        Color.fromARGB(0, 0, 0, 0),
                         Color.fromARGB(0, 0, 0, 0),
                         Color.fromARGB(255, 0, 0, 0),
                       ],
@@ -220,8 +221,8 @@ class ScreenMainPlayerState extends State<ScreenMainPlayer> {
                     return Column(
                       // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const SizedBox(
-                          height: 10,
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height / 13,
                         ),
                         Expanded(
                           flex: 1,
@@ -229,19 +230,36 @@ class ScreenMainPlayerState extends State<ScreenMainPlayer> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               SizedBox(
-                                width: 250,
-                                child: Text(
-                                  // widget.homeBuildList[_selectedIndex].metas
-                                  //     .title!,
+                                width: 280,
+                                child: TextScroll(
                                   myAudio.metas.title!,
+                                  mode: TextScrollMode.bouncing,
+                                  velocity:
+                                      Velocity(pixelsPerSecond: Offset(50, 0)),
+                                  delayBefore: Duration(milliseconds: 500),
+                                  numberOfReps: 1,
+                                  pauseBetween: Duration(milliseconds: 50),
                                   style: const TextStyle(
                                     color: Color.fromARGB(196, 244, 244, 244),
                                     fontSize: 30,
                                     fontWeight: FontWeight.w800,
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  textAlign: TextAlign.center,
+                                  textAlign: TextAlign.right,
+                                  selectable: true,
                                 ),
+                                // child: Text(
+                                //   // widget.homeBuildList[_selectedIndex].metas
+                                //   //     .title!,
+                                //   myAudio.metas.title!,
+                                //   style: const TextStyle(
+                                //     color: Color.fromARGB(196, 244, 244, 244),
+                                //     fontSize: 30,
+                                //     fontWeight: FontWeight.w800,
+                                //     overflow: TextOverflow.ellipsis,
+                                //   ),
+                                //   textAlign: TextAlign.center,
+                                // ),
                               ),
                               const SizedBox(
                                 height: 9,
@@ -269,8 +287,8 @@ class ScreenMainPlayerState extends State<ScreenMainPlayer> {
                           ),
                         ),
                         SizedBox(
-                          height: 200,
-                          width: 200,
+                          height: 300,
+                          width: 300,
                           child: QueryArtworkWidget(
                             id: int.parse(myAudio.metas.id!),
                             type: ArtworkType.AUDIO,
@@ -278,8 +296,10 @@ class ScreenMainPlayerState extends State<ScreenMainPlayer> {
                             nullArtworkWidget: Image(
                               image: AssetImage('assets/images/defult.jpg'),
                             ),
-                            format: ArtworkFormat.PNG,
                           ),
+                        ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height / 20,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -298,6 +318,7 @@ class ScreenMainPlayerState extends State<ScreenMainPlayer> {
                                       } else {
                                         assetsAudioPlayer
                                             .setLoopMode(LoopMode.playlist);
+
                                         // widget.homeBuildList[_selectedIndex] =
                                         //     find(widget.homeBuildList,
                                         //         playing.audio.assetAudioPath);
@@ -331,6 +352,31 @@ class ScreenMainPlayerState extends State<ScreenMainPlayer> {
                                     });
                                   },
                                   icon: isThisFavorate(myAudio.metas.id!)),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      if (isShuffle) {
+                                        assetsAudioPlayer.toggleShuffle();
+                                      }
+                                      isShuffle = !isShuffle;
+                                    });
+                                  },
+                                  icon: isShuffle == true
+                                      ? const Iconify(
+                                          MdiLight.shuffle,
+                                          color: Color.fromARGB(
+                                              255, 255, 234, 234),
+                                          size: 30,
+                                        )
+                                      : const Iconify(
+                                          MdiLight.arrow_right,
+                                          color: Color.fromARGB(
+                                              255, 255, 234, 234),
+                                          size: 30,
+                                        )),
                             ),
                           ],
                         ),

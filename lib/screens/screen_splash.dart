@@ -42,7 +42,7 @@ class _ScreenSplashState extends State<ScreenSplash> {
   List<Audio> filterdSongs = [];
 
   fetchSongs() async {
-    fetchedSongs = await _audioQuery.querySongs();
+    fetchedSongs = await _audioQuery.querySongs(sortType: SongSortType.TITLE);
 
     for (var element in fetchedSongs) {
       if (element.fileExtension == "mp3") {

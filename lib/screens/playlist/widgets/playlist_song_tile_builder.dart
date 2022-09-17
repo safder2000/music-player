@@ -66,7 +66,8 @@ class _PlaylistSongListState extends State<PlaylistSongListBuilder> {
                             ),
                           );
 
-                          openPlayer(widget.homeBuildList, index, context);
+                          Player.openPlayer(
+                              widget.homeBuildList, index, context);
                         },
                         child: Row(
                           children: [

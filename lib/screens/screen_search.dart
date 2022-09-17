@@ -1,5 +1,6 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_launcher_icons/xml_templates.dart';
 
 import 'package:iconify_flutter/iconify_flutter.dart'; // For Iconify Widget
 
@@ -198,5 +199,14 @@ class ScreenSearchstate extends State<ScreenSearch> {
     );
   }
 
-  songNotFound() {}
+  songNotFound() {
+    SizedBox(
+      height: MediaQuery.of(context).size.height * 05,
+      child: Center(
+          child: Text(
+        'No Songs Found',
+        style: TextStyle(color: Colors.white, fontSize: 40),
+      )),
+    );
+  }
 }

@@ -30,7 +30,7 @@ class Favorite {
     List? playlist = box.get(name);
     final songBox = Boxes.getSongs();
     List<AllSongs> dbSongs = songBox.values.toList().cast<AllSongs>();
-    final temp = findSong(dbSongs, songId!);
+    final temp = findSong(dbSongs, songId);
     playlist!
             .where((element) => element.id.toString() == temp.id.toString())
             .isEmpty

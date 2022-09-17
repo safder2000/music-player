@@ -325,6 +325,6 @@ class ScreenMainPlayliststate extends State<ScreenMainPlaylist> {
       ),
     );
 
-    openPlayer(playlistSongs, 0, context);
+    Player.openPlayer(playlistSongs, 0, context);
   }
 }

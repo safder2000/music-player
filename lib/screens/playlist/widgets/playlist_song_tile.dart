@@ -57,7 +57,8 @@ class _PlaylistSongTileState extends State<PlaylistSongTile> {
                       ),
                     );
 
-                    openPlayer(widget.homeBuildList, widget.index, context);
+                    Player.openPlayer(
+                        widget.homeBuildList, widget.index, context);
                   },
                   child: Row(
                     children: [

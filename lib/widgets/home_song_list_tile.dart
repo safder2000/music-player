@@ -55,7 +55,8 @@ class _HomeSongListTileState extends State<HomeSongListTile> {
                         songId:
                             widget.homeBuildList[widget.songIndex].metas.id!);
 
-                    openPlayer(widget.homeBuildList, widget.songIndex, context);
+                    Player.openPlayer(
+                        widget.homeBuildList, widget.songIndex, context);
                   },
                   child: Row(
                     children: [
