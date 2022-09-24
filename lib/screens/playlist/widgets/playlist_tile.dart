@@ -60,130 +60,133 @@ class _PlayListTileState extends State<PlayListTile> {
   @override
   Widget build(BuildContext context) {
     List<AllSongs> playlist = box.get(widget.name)!.cast<AllSongs>();
-    return Padding(
-      padding: const EdgeInsets.only(top: 4.0, bottom: 4, right: 8, left: 8),
-      child: InkWell(
-        onTap: () => Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (ctx1) => ScreenMainPlaylist(
-                playlist: playlist, playlistName: widget.name),
-          ),
-        ),
-        child: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomCenter,
-              stops: [
-                0.0,
-                0.9,
-              ],
-              colors: [
-                Color.fromARGB(255, 219, 242, 39),
-                Color.fromARGB(225, 159, 193, 49),
-              ],
-            ),
-            borderRadius: BorderRadius.all(
-              Radius.circular(20),
+    return Visibility(
+      visible: editable(),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 4.0, bottom: 4, right: 8, left: 8),
+        child: InkWell(
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (ctx1) => ScreenMainPlaylist(
+                  playlist: playlist, playlistName: widget.name),
             ),
           ),
-          height: 60,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  tileIcon(),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  Text(
-                    '${widget.name}',
-                    style: TextStyle(
-                        color: Color.fromARGB(255, 4, 41, 64),
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold),
-                  ),
+          child: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomCenter,
+                stops: [
+                  0.0,
+                  0.9,
+                ],
+                colors: [
+                  Color.fromARGB(255, 219, 242, 39),
+                  Color.fromARGB(225, 159, 193, 49),
                 ],
               ),
-              Visibility(
-                visible: editable(),
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 13.0),
-                  child: PopupMenuButton<int>(
-                    onSelected: (result) {
-                      if (result == 0) {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return PlaylistRename(
-                                oldName: widget.name,
-                              );
-                            });
-                      }
-                      if (result == 1) {
-                        deleteConfirm();
-                      }
-                    },
-                    itemBuilder: (context) => [
-                      // popupmenu item 1
-                      PopupMenuItem(
-                        value: 0,
+              borderRadius: BorderRadius.all(
+                Radius.circular(20),
+              ),
+            ),
+            height: 60,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    tileIcon(),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    Text(
+                      '${widget.name}',
+                      style: TextStyle(
+                          color: Color.fromARGB(255, 4, 41, 64),
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                Visibility(
+                  visible: editable(),
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 13.0),
+                    child: PopupMenuButton<int>(
+                      onSelected: (result) {
+                        if (result == 0) {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return PlaylistRename(
+                                  oldName: widget.name,
+                                );
+                              });
+                        }
+                        if (result == 1) {
+                          deleteConfirm();
+                        }
+                      },
+                      itemBuilder: (context) => [
+                        // popupmenu item 1
+                        PopupMenuItem(
+                          value: 0,
 
-                        // row has two child icon and text.
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.edit,
-                              color: Color.fromARGB(255, 219, 242, 39),
-                            ),
-                            SizedBox(
-                              // sized box with width 10
-                              width: 10,
-                            ),
-                            Text(
-                              "Rename",
-                              style: TextStyle(
+                          // row has two child icon and text.
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.edit,
                                 color: Color.fromARGB(255, 219, 242, 39),
                               ),
-                            ),
-                          ],
+                              SizedBox(
+                                // sized box with width 10
+                                width: 10,
+                              ),
+                              Text(
+                                "Rename",
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 219, 242, 39),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      // popupmenu item 2
-                      PopupMenuItem(
-                        value: 1,
-                        // row has two child icon and text
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.delete,
-                              color: Color.fromARGB(255, 219, 242, 39),
-                            ),
-                            SizedBox(
-                              // sized box with width 10
-                              width: 10,
-                            ),
-                            Text(
-                              "Delete",
-                              style: TextStyle(
+                        // popupmenu item 2
+                        PopupMenuItem(
+                          value: 1,
+                          // row has two child icon and text
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.delete,
                                 color: Color.fromARGB(255, 219, 242, 39),
                               ),
-                            )
-                          ],
+                              SizedBox(
+                                // sized box with width 10
+                                width: 10,
+                              ),
+                              Text(
+                                "Delete",
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 219, 242, 39),
+                                ),
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                    offset: Offset(0, 50),
-                    color: const Color.fromARGB(255, 1, 64, 64),
-                    elevation: 2,
+                      ],
+                      offset: Offset(0, 50),
+                      color: const Color.fromARGB(255, 1, 64, 64),
+                      elevation: 2,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

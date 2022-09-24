@@ -99,10 +99,11 @@ class ScreenHomestate extends State<ScreenHome> {
             ),
           ],
         ),
-        body: Column(
+        body: ListView(
           children: [
             Expanded(
               child: Container(
+                height: MediaQuery.of(context).size.height,
                 decoration: const BoxDecoration(
                     // image: DecorationImage(
                     //   alignment: Alignment.topCenter,

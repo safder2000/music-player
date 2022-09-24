@@ -1,14 +1,13 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_launcher_icons/xml_templates.dart';
-
+import 'dart:developer';
 import 'package:iconify_flutter/iconify_flutter.dart'; // For Iconify Widget
 
 import 'package:iconify_flutter/icons/carbon.dart';
 import 'package:music_player/db/all_songs.dart';
 import 'package:music_player/db/functions/Boxes.dart';
 
-import 'package:music_player/screens/menu/screen_main.dart';
 import 'package:music_player/widgets/home_song_list_builder.dart';
 
 import 'package:music_player/widgets/home_song_list_tile.dart';
@@ -69,6 +68,13 @@ class ScreenSearchstate extends State<ScreenSearch> {
                                 size: 25,
                               ),
                               onPressed: () {
+                                // KeyboardVisibilityNotification().addNewListener(
+                                //   onChange: (bool visible) {
+                                //     print(visible);
+                                //   },
+                                // );
+
+                                FocusManager.instance.primaryFocus?.unfocus();
                                 Navigator.pop(context);
                               },
                             ),
@@ -163,17 +169,22 @@ class ScreenSearchstate extends State<ScreenSearch> {
                                   }
 
                                   return Container(
-                                    child: filteredList.isNotEmpty
-                                        ? SizedBox(
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                05,
-                                            child: LocalSongListBuilder(
-                                                homeBuildList: filterdSongs),
-                                          )
-                                        : songNotFound(),
-                                  );
+                                      child: filteredList.isNotEmpty
+                                          ? SizedBox(
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  05,
+                                              child: LocalSongListBuilder(
+                                                  homeBuildList: filterdSongs),
+                                            )
+                                          : SizedBox(
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  05,
+                                              child: songNotFound(),
+                                            ));
                                 }
                                 //===================================================================
                                 // HomeSongListTile(
@@ -199,14 +210,11 @@ class ScreenSearchstate extends State<ScreenSearch> {
     );
   }
 
-  songNotFound() {
-    SizedBox(
-      height: MediaQuery.of(context).size.height * 05,
-      child: Center(
-          child: Text(
-        'No Songs Found',
-        style: TextStyle(color: Colors.white, fontSize: 40),
-      )),
+  Text songNotFound() {
+    log('no sogsn found');
+    return Text(
+      'No songs found',
+      style: TextStyle(color: Color.fromARGB(75, 255, 255, 255), fontSize: 20),
     );
   }
 }

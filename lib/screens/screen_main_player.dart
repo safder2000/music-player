@@ -286,16 +286,17 @@ class ScreenMainPlayerState extends State<ScreenMainPlayer> {
                             ],
                           ),
                         ),
-                        SizedBox(
-                          height: 300,
-                          width: 300,
-                          child: QueryArtworkWidget(
-                            id: int.parse(myAudio.metas.id!),
-                            type: ArtworkType.AUDIO,
-                            artworkBorder: BorderRadius.circular(8),
-                            nullArtworkWidget: Image(
-                              image: AssetImage('assets/images/defult.jpg'),
-                            ),
+                        QueryArtworkWidget(
+                          id: int.parse(myAudio.metas.id!),
+                          type: ArtworkType.AUDIO,
+                          artworkQuality: FilterQuality.high,
+                          size: 1500,
+                          artworkHeight: 300,
+                          artworkWidth: 300,
+                          artworkBlendMode: BlendMode.colorBurn,
+                          artworkBorder: BorderRadius.circular(8),
+                          nullArtworkWidget: Image(
+                            image: AssetImage('assets/images/defult.jpg'),
                           ),
                         ),
                         SizedBox(

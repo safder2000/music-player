@@ -1,12 +1,7 @@
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:on_audio_query/on_audio_query.dart';
 
 import '../../widgets/miniplayer.dart';
 

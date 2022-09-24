@@ -4,6 +4,7 @@ import 'package:music_player/db/functions/player.dart';
 
 import 'package:music_player/screens/menu/screen_about.dart';
 import 'package:music_player/screens/menu/screen_nerdy.dart';
+import 'package:music_player/widgets/themes.dart';
 
 class ScreenMenu extends StatefulWidget {
   const ScreenMenu({Key? key}) : super(key: key);
@@ -14,6 +15,7 @@ class ScreenMenu extends StatefulWidget {
 
 class _ScreenMenuState extends State<ScreenMenu> {
   bool _switchValue = true;
+  bool _themeSwitchValue = true;
   @override
   Widget build(BuildContext context) => Scaffold(
       backgroundColor: const Color.fromARGB(255, 219, 242, 39),
@@ -102,6 +104,46 @@ class _ScreenMenuState extends State<ScreenMenu> {
                     ),
                   ),
                 ),
+                // SizedBox(
+                //   height: 30,
+                // ),
+                // Container(
+                //   decoration: const BoxDecoration(
+                //     borderRadius: BorderRadius.only(
+                //         topRight: Radius.circular(50),
+                //         bottomRight: Radius.circular(50)),
+                //     color: Color.fromARGB(255, 1, 64, 64),
+                //   ),
+                //   child: Padding(
+                //     padding: const EdgeInsets.only(top: 7.0, bottom: 7.0),
+                //     child: Row(
+                //       children: [
+                //         const Text(
+                //           '   Theme',
+                //           style: TextStyle(color: Colors.white, fontSize: 25),
+                //           textAlign: TextAlign.center,
+                //         ),
+                //         Transform.scale(
+                //           scale: 0.8,
+                //           child: CupertinoSwitch(
+                //             trackColor: const Color.fromARGB(118, 2, 157, 157),
+                //             activeColor:
+                //                 const Color.fromARGB(255, 219, 242, 39),
+                //             value: _themeSwitchValue,
+                //             onChanged: (value) {
+                //               _themeSwitchValue = !_themeSwitchValue;
+
+                //               currentTheme.toggleTheme();
+                //               setState(() {
+                //                 value = _themeSwitchValue;
+                //               });
+                //             },
+                //           ),
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
                 const SizedBox(
                   height: 60,
                 ),

@@ -223,8 +223,7 @@ class ScreenMainPlayliststate extends State<ScreenMainPlaylist> {
                             ),
                             Expanded(
                                 child: SizedBox(
-                              // height: MediaQuery.of(context).size.height *
-                              //     0.9,
+                              height: MediaQuery.of(context).size.height * 0.9,
                               child: ValueListenableBuilder<Box<AllSongs>>(
                                   valueListenable:
                                       Boxes.getSongs().listenable(),
@@ -264,6 +263,7 @@ class ScreenMainPlayliststate extends State<ScreenMainPlaylist> {
   }
 
   ShowAllSongs() {
+    heroTag:
     List<Audio> allSongs = GetAll.getAllAudio();
     showModalBottomSheet(
       backgroundColor: Color.fromARGB(255, 1, 64, 64),
