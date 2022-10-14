@@ -2,6 +2,7 @@ import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/carbon.dart';
+import 'package:music_player/colors/colors.dart';
 import 'package:music_player/db/all_songs.dart';
 import 'package:music_player/db/functions/Boxes.dart';
 import 'package:music_player/screens/playlist/screen_main_playlist.dart';
@@ -198,19 +199,18 @@ class _PlayListTileState extends State<PlayListTile> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            backgroundColor: const Color.fromARGB(255, 219, 242, 39),
+            backgroundColor: kGreen,
             scrollable: true,
             title: Text(
               "Delete ' ${keys[widget.index]} ' ?",
-              style: TextStyle(
-                  color: Color.fromARGB(255, 1, 64, 64), fontSize: 25),
+              style: TextStyle(color: kYellow, fontSize: 25),
             ),
             actions: [
               InkWell(
                 onTap: (() => Navigator.pop(context)),
                 child: Container(
                   decoration: const BoxDecoration(
-                    color: Color.fromARGB(255, 1, 64, 64),
+                    color: kYellow,
                     borderRadius: BorderRadius.all(
                       Radius.circular(50),
                     ),
@@ -219,7 +219,7 @@ class _PlayListTileState extends State<PlayListTile> {
                     padding: EdgeInsets.all(15.0),
                     child: Icon(
                       Icons.close,
-                      color: Color.fromARGB(255, 219, 242, 39),
+                      color: kGreen,
                       size: 30,
                     ),
                   ),
@@ -231,7 +231,7 @@ class _PlayListTileState extends State<PlayListTile> {
                 },
                 child: Container(
                   decoration: const BoxDecoration(
-                    color: Color.fromARGB(255, 1, 64, 64),
+                    color: kYellow,
                     borderRadius: BorderRadius.all(
                       Radius.circular(50),
                     ),

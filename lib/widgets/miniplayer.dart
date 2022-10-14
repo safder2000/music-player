@@ -1,9 +1,11 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:iconify_flutter/icons/radix_icons.dart';
 import 'package:music_player/screens/screen_main_player.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'dart:developer';
+import 'package:iconify_flutter/iconify_flutter.dart';
 
 class MiniPlayer extends StatefulWidget {
   MiniPlayer({
@@ -41,6 +43,12 @@ class _MiniPlayerState extends State<MiniPlayer>
       duration: const Duration(milliseconds: 100),
     );
     toggleIcon();
+    if (widget.assetsAudioPlayer.isPlaying == true) {
+      log('playing......');
+      controller.forward();
+    } else {
+      controller.reverse();
+    }
   }
 
   @override
@@ -119,7 +127,7 @@ class _MiniPlayerState extends State<MiniPlayer>
                   return Row(
                     children: [
                       SizedBox(
-                        width: MediaQuery.of(context).size.width / 55,
+                        width: 20,
                       ),
                       Container(
                         // decoration: const BoxDecoration(
@@ -147,7 +155,7 @@ class _MiniPlayerState extends State<MiniPlayer>
                       Column(
                         children: [
                           SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.5,
+                            width: MediaQuery.of(context).size.width * 0.3,
                             child: Text(
                               '${myAudio.metas.title!.isEmpty ? widget.homeBuildList[0].metas.title : myAudio.metas.title}',
                               style:
@@ -156,7 +164,7 @@ class _MiniPlayerState extends State<MiniPlayer>
                             ),
                           ),
                           SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.52,
+                            width: MediaQuery.of(context).size.width * 0.3,
                             child: Text(
                               ' ${myAudio.metas.title!.isEmpty ? widget.homeBuildList[0].metas.artist : myAudio.metas.artist}',
                               style: TextStyle(
@@ -170,22 +178,40 @@ class _MiniPlayerState extends State<MiniPlayer>
                     ],
                   );
                 }),
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: toggleIcon,
-                      iconSize: 50,
-                      icon: AnimatedIcon(
-                        icon: AnimatedIcons.play_pause,
-                        progress: controller,
-                        color: const Color.fromARGB(255, 219, 242, 39),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 20,
-                    )
-                  ],
+                // Row(
+                //   children: [
+
+                //   ],
+                // ),
+                Spacer(),
+                IconButton(
+                    onPressed: () {
+                      widget.assetsAudioPlayer.previous();
+                    }, //FaIcon(FontAwesomeIcons.gamepad),
+                    icon: const Iconify(
+                      RadixIcons.track_previous,
+                      color: Colors.white,
+                      size: 30,
+                    )),
+                IconButton(
+                  onPressed: toggleIcon,
+                  iconSize: 50,
+                  icon: AnimatedIcon(
+                    icon: AnimatedIcons.play_pause,
+                    progress: controller,
+                    color: const Color.fromARGB(255, 219, 242, 39),
+                  ),
                 ),
+                IconButton(
+                    onPressed: () {
+                      widget.assetsAudioPlayer.next();
+                    }, //FaIcon(FontAwesomeIcons.gamepad),
+                    icon: const Iconify(
+                      RadixIcons.track_next,
+                      color: Colors.white,
+                      size: 30,
+                    )),
+                Spacer()
               ],
             ),
           ],

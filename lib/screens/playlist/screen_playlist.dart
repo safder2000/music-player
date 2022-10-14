@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/carbon.dart';
+import 'package:music_player/colors/colors.dart';
 import 'package:music_player/db/all_songs.dart';
 import 'package:music_player/db/functions/Boxes.dart';
 import 'package:music_player/db/functions/player.dart';
@@ -71,8 +72,7 @@ class _ScreenPlaylistState extends State<ScreenPlaylist> {
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        backgroundColor:
-                            const Color.fromARGB(255, 219, 242, 39),
+                        backgroundColor: kGreen,
                         scrollable: true,
                         content: Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -86,11 +86,11 @@ class _ScreenPlaylistState extends State<ScreenPlaylist> {
                                     onChanged: (value) {
                                       playListTitle = value.trim();
                                     },
-                                    cursorColor: Color.fromARGB(255, 1, 64, 64),
+                                    cursorColor: kYellow,
                                     cursorHeight: 30,
                                     style: TextStyle(
                                       fontSize: 30,
-                                      color: Color.fromARGB(255, 1, 64, 64),
+                                      color: kYellow,
                                     ),
                                     controller: _newPlayList,
                                     decoration: const InputDecoration(
@@ -127,7 +127,7 @@ class _ScreenPlaylistState extends State<ScreenPlaylist> {
                             onTap: (() => Navigator.pop(context)),
                             child: Container(
                               decoration: const BoxDecoration(
-                                color: Color.fromARGB(255, 1, 64, 64),
+                                color: kYellow,
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(50),
                                 ),
@@ -136,7 +136,7 @@ class _ScreenPlaylistState extends State<ScreenPlaylist> {
                                 padding: EdgeInsets.all(15.0),
                                 child: Icon(
                                   Icons.close,
-                                  color: Color.fromARGB(255, 219, 242, 39),
+                                  color: kGreen,
                                   size: 30,
                                 ),
                               ),
@@ -144,7 +144,7 @@ class _ScreenPlaylistState extends State<ScreenPlaylist> {
                           ),
                           Container(
                             decoration: const BoxDecoration(
-                              color: Color.fromARGB(255, 1, 64, 64),
+                              color: kYellow,
                               borderRadius: BorderRadius.all(
                                 Radius.circular(50),
                               ),
@@ -161,8 +161,8 @@ class _ScreenPlaylistState extends State<ScreenPlaylist> {
                                 },
                                 child: const Icon(
                                   Icons.add,
-                                  color: Color.fromARGB(255, 219, 242, 39),
-                                  size: 32,
+                                  color: kGreen,
+                                  size: 31,
                                 ),
                               ),
                             ),

@@ -7,6 +7,7 @@ import 'package:iconify_flutter/iconify_flutter.dart'; // For Iconify Widget
 import 'package:iconify_flutter/icons/zondicons.dart'; // for Non Colorful Icons
 
 import 'package:iconify_flutter/icons/carbon.dart';
+import 'package:music_player/colors/colors.dart';
 
 import 'package:music_player/screens/menu/screen_menu.dart';
 import 'package:music_player/screens/playlist/screen_playlist.dart';
@@ -43,10 +44,7 @@ class ScreenHomestate extends State<ScreenHome> {
                 mainScreen: ScreenHome(
                   homeBuildList: widget.homeBuildList,
                 )),
-            icon: const Iconify(
-              Ph.list,
-              color: Color.fromARGB(255, 219, 242, 39),
-            ),
+            icon: const Iconify(Ph.list, color: kYellow),
           ),
           title: Text(
             'All Songs',
@@ -58,7 +56,7 @@ class ScreenHomestate extends State<ScreenHome> {
               padding: const EdgeInsets.only(top: 8.0, bottom: 8),
               child: Container(
                 decoration: const BoxDecoration(
-                    color: Color.fromARGB(255, 219, 242, 39),
+                    color: kYellow,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(40),
                       bottomLeft: Radius.circular(40),

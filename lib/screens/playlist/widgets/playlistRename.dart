@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:music_player/colors/colors.dart';
 import 'package:music_player/db/functions/Boxes.dart';
 
 class PlaylistRename extends StatelessWidget {
@@ -11,7 +12,7 @@ class PlaylistRename extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: const Color.fromARGB(255, 219, 242, 39),
+      backgroundColor: kGreen,
       scrollable: true,
       // title: Text(
       //   'Recent',
@@ -33,12 +34,12 @@ class PlaylistRename extends StatelessWidget {
             decoration: const InputDecoration(
               enabledBorder: UnderlineInputBorder(
                 borderSide: BorderSide(
-                  color: Color.fromARGB(255, 1, 64, 64),
+                  color: kYellow,
                 ),
               ),
             ),
             style: const TextStyle(
-              color: Color.fromARGB(255, 1, 64, 64),
+              color: kYellow,
               fontSize: 20,
             ),
             onChanged: (value) {
@@ -67,7 +68,7 @@ class PlaylistRename extends StatelessWidget {
               onTap: (() => Navigator.pop(context)),
               child: Container(
                 decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 1, 64, 64),
+                  color: kYellow,
                   borderRadius: BorderRadius.all(
                     Radius.circular(50),
                   ),
@@ -76,7 +77,7 @@ class PlaylistRename extends StatelessWidget {
                   padding: EdgeInsets.all(15.0),
                   child: Icon(
                     Icons.close,
-                    color: Color.fromARGB(255, 219, 242, 39),
+                    color: kGreen,
                     size: 30,
                   ),
                 ),
@@ -96,7 +97,7 @@ class PlaylistRename extends StatelessWidget {
               },
               child: Container(
                 decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 1, 64, 64),
+                  color: kYellow,
                   borderRadius: BorderRadius.all(
                     Radius.circular(50),
                   ),
@@ -105,7 +106,7 @@ class PlaylistRename extends StatelessWidget {
                   padding: EdgeInsets.all(15.0),
                   child: Icon(
                     Icons.save,
-                    color: Color.fromARGB(255, 219, 242, 39),
+                    color: kGreen,
                     size: 32,
                   ),
                 ),

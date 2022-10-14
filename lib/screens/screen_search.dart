@@ -182,7 +182,7 @@ class ScreenSearchstate extends State<ScreenSearch> {
                                               height: MediaQuery.of(context)
                                                       .size
                                                       .height *
-                                                  05,
+                                                  .5,
                                               child: songNotFound(),
                                             ));
                                 }
@@ -210,11 +210,14 @@ class ScreenSearchstate extends State<ScreenSearch> {
     );
   }
 
-  Text songNotFound() {
+  Center songNotFound() {
     log('no sogsn found');
-    return Text(
-      'No songs found',
-      style: TextStyle(color: Color.fromARGB(75, 255, 255, 255), fontSize: 20),
+    return Center(
+      child: Text(
+        'No songs found',
+        style:
+            TextStyle(color: Color.fromARGB(107, 255, 255, 255), fontSize: 20),
+      ),
     );
   }
 }
