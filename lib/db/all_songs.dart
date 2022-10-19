@@ -9,6 +9,7 @@ class AllSongs extends HiveObject {
     required this.artist,
     required this.id,
     required this.duration,
+    required this.dateModified,
   });
 
   @HiveField(0)
@@ -21,4 +22,6 @@ class AllSongs extends HiveObject {
   int? id;
   @HiveField(3)
   int? duration;
+  @HiveField(5)
+  int? dateModified;
 }

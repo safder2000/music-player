@@ -6,25 +6,27 @@ import 'package:music_player/widgets/home_song_list_tile.dart';
 
 import 'package:on_audio_query/on_audio_query.dart';
 
-class LocalSongListBuilder extends StatefulWidget {
+class LocalSongListBuilder extends StatelessWidget {
   List<Audio> homeBuildList = [];
   LocalSongListBuilder({Key? key, required this.homeBuildList})
       : super(key: key);
 
-  @override
-  State<LocalSongListBuilder> createState() => _LocalSongListBuilderState();
-}
-
-class _LocalSongListBuilderState extends State<LocalSongListBuilder> {
   final _audioQuery = OnAudioQuery();
+
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemBuilder: (context, index) => HomeSongListTile(
-        homeBuildList: widget.homeBuildList,
-        songIndex: index,
-      ),
-      itemCount: widget.homeBuildList.length,
-    );
+    return homeBuildList.isEmpty
+        ? Center(
+            child: Text(
+            'No Songs found',
+            style: TextStyle(color: Colors.white60, fontSize: 17),
+          ))
+        : ListView.builder(
+            itemBuilder: (context, index) => HomeSongListTile(
+              homeBuildList: homeBuildList,
+              songIndex: index,
+            ),
+            itemCount: homeBuildList.length,
+          );
   }
 }

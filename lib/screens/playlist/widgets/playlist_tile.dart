@@ -1,14 +1,14 @@
-import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
-import 'package:iconify_flutter/iconify_flutter.dart';
-import 'package:iconify_flutter/icons/carbon.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:music_player/application/playlist_folder/playlist_folder_bloc.dart';
 import 'package:music_player/colors/colors.dart';
 import 'package:music_player/db/all_songs.dart';
 import 'package:music_player/db/functions/Boxes.dart';
 import 'package:music_player/screens/playlist/screen_main_playlist.dart';
 import 'package:music_player/screens/playlist/widgets/playlistRename.dart';
 
-class PlayListTile extends StatefulWidget {
+class PlayListTile extends StatelessWidget {
   PlayListTile(
       {Key? key,
       this.icon = const Icon(Icons.music_note),
@@ -19,28 +19,12 @@ class PlayListTile extends StatefulWidget {
   String name;
   bool? isEditable;
   int index;
-  @override
-  State<PlayListTile> createState() => _PlayListTileState();
-}
-
-TextEditingController renameController = TextEditingController();
-final box = Boxes.getList();
-ValueNotifier<List<AllSongs>> playlistNotifier = ValueNotifier([]);
-
-class _PlayListTileState extends State<PlayListTile> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    widget.isEditable = editable();
-  }
-
   Icon tileIcon() {
     Icon temp = Icon(Icons.music_note);
-    if (widget.name == "favorite") {
+    if (name == "favorite") {
       temp = Icon(Icons.favorite);
     }
-    if (widget.name == "recent") {
+    if (name == "recent") {
       temp = Icon(Icons.timelapse);
     }
     return temp;
@@ -48,7 +32,7 @@ class _PlayListTileState extends State<PlayListTile> {
 
   bool editable() {
     bool temp = true;
-    if (widget.name == "favorite" || widget.name == "recent") {
+    if (name == "favorite" || name == "recent") {
       temp = false;
     }
     return temp;
@@ -60,7 +44,6 @@ class _PlayListTileState extends State<PlayListTile> {
 
   @override
   Widget build(BuildContext context) {
-    List<AllSongs> playlist = box.get(widget.name)!.cast<AllSongs>();
     return Visibility(
       visible: editable(),
       child: Padding(
@@ -68,8 +51,7 @@ class _PlayListTileState extends State<PlayListTile> {
         child: InkWell(
           onTap: () => Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (ctx1) => ScreenMainPlaylist(
-                  playlist: playlist, playlistName: widget.name),
+              builder: (ctx1) => ScreenMainPlaylist(playlistName: name),
             ),
           ),
           child: Container(
@@ -104,7 +86,7 @@ class _PlayListTileState extends State<PlayListTile> {
                       width: 20,
                     ),
                     Text(
-                      '${widget.name}',
+                      '$name',
                       style: TextStyle(
                           color: Color.fromARGB(255, 4, 41, 64),
                           fontSize: 22,
@@ -123,12 +105,12 @@ class _PlayListTileState extends State<PlayListTile> {
                               context: context,
                               builder: (BuildContext context) {
                                 return PlaylistRename(
-                                  oldName: widget.name,
+                                  oldName: name,
                                 );
                               });
                         }
                         if (result == 1) {
-                          deleteConfirm();
+                          deleteConfirm(context: context);
                         }
                       },
                       itemBuilder: (context) => [
@@ -194,7 +176,7 @@ class _PlayListTileState extends State<PlayListTile> {
     );
   }
 
-  deleteConfirm() {
+  deleteConfirm({required context}) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -202,7 +184,7 @@ class _PlayListTileState extends State<PlayListTile> {
             backgroundColor: kGreen,
             scrollable: true,
             title: Text(
-              "Delete ' ${keys[widget.index]} ' ?",
+              "Delete ' ${keys[index]} ' ?",
               style: TextStyle(color: kYellow, fontSize: 25),
             ),
             actions: [
@@ -227,7 +209,10 @@ class _PlayListTileState extends State<PlayListTile> {
               ),
               InkWell(
                 onTap: () {
-                  deletePlaylist();
+                  context
+                      .read<PlaylistFolderBloc>()
+                      .add(DeletePlaylist(playlistKey: name));
+                  Navigator.pop(context);
                 },
                 child: Container(
                   decoration: const BoxDecoration(
@@ -250,11 +235,8 @@ class _PlayListTileState extends State<PlayListTile> {
           );
         });
   }
-
-  deletePlaylist() {
-    box.delete(keys[widget.index]);
-
-    setState(() {});
-    Navigator.pop(context);
-  }
 }
+
+TextEditingController renameController = TextEditingController();
+final box = Boxes.getList();
+ValueNotifier<List<AllSongs>> playlistNotifier = ValueNotifier([]);

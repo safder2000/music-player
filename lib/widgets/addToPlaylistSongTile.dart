@@ -1,26 +1,12 @@
-import 'dart:developer';
-
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
-import 'package:iconify_flutter/iconify_flutter.dart';
-import 'package:iconify_flutter/icons/carbon.dart';
-import 'package:music_player/db/all_songs.dart';
-import 'package:music_player/db/functions/Boxes.dart';
-import 'package:music_player/widgets/addToFavorite.dart';
-import 'package:music_player/widgets/addToPlaylistTile.dart';
-
-import 'package:music_player/widgets/miniplayer.dart';
-import 'package:on_audio_query/on_audio_query.dart';
-import 'package:music_player/db/functions/player.dart';
-import 'package:assets_audio_player/assets_audio_player.dart';
-
-import 'package:flutter/material.dart';
-
-import 'package:music_player/widgets/home_song_list_tile.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:music_player/application/playlist/playlist_bloc.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
-class AddToPlalistTileBuilder extends StatefulWidget {
+final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+class AddToPlalistTileBuilder extends StatelessWidget {
   List<Audio> homeBuildList = [];
   String playlistName;
   AddToPlalistTileBuilder(
@@ -28,26 +14,19 @@ class AddToPlalistTileBuilder extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<AddToPlalistTileBuilder> createState() =>
-      _AddToPlalistTileBuilderState();
-}
-
-class _AddToPlalistTileBuilderState extends State<AddToPlalistTileBuilder> {
-  final _audioQuery = OnAudioQuery();
-  @override
   Widget build(BuildContext context) {
     return ListView.builder(
       itemBuilder: (context, index) => SongTile(
-        homeBuildList: widget.homeBuildList,
+        homeBuildList: homeBuildList,
         songIndex: index,
-        playlistName: widget.playlistName,
+        playlistName: playlistName,
       ),
-      itemCount: widget.homeBuildList.length,
+      itemCount: homeBuildList.length,
     );
   }
 }
 
-class SongTile extends StatefulWidget {
+class SongTile extends StatelessWidget {
   SongTile({
     Key? key,
     required this.homeBuildList,
@@ -60,12 +39,8 @@ class SongTile extends StatefulWidget {
   final songIndex;
   String playlistName;
 
-  @override
-  State<SongTile> createState() => _SongTileState();
-}
-
-class _SongTileState extends State<SongTile> {
   Object? _value = 0;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -77,7 +52,11 @@ class _SongTileState extends State<SongTile> {
               Expanded(
                 child: InkWell(
                   onTap: () {
-                    addToPlayList();
+                    context.read<PlaylistBloc>().add(AddToPlaylist(
+                        songId: homeBuildList[songIndex].metas.id!,
+                        playlistName: playlistName,
+                        context: context,
+                        key: _scaffoldKey));
                   },
                   child: Row(
                     children: [
@@ -88,7 +67,7 @@ class _SongTileState extends State<SongTile> {
                               const BorderRadius.all(Radius.circular(10)),
                           image: DecorationImage(
                             alignment: Alignment.topCenter,
-                            image: widget.songImg,
+                            image: songImg,
                             fit: BoxFit.fill,
                           ),
                         ),
@@ -96,8 +75,7 @@ class _SongTileState extends State<SongTile> {
                         width: 50,
                         child: SizedBox(
                           child: QueryArtworkWidget(
-                            id: int.parse(widget
-                                .homeBuildList[widget.songIndex].metas.id!),
+                            id: int.parse(homeBuildList[songIndex].metas.id!),
                             type: ArtworkType.AUDIO,
                             artworkBorder: BorderRadius.circular(8),
                             nullArtworkWidget: Image(
@@ -114,8 +92,7 @@ class _SongTileState extends State<SongTile> {
                           SizedBox(
                             width: 235,
                             child: Text(
-                              widget
-                                  .homeBuildList[widget.songIndex].metas.title!,
+                              homeBuildList[songIndex].metas.title!,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
                                   color: Colors.white, fontSize: 18),
@@ -127,7 +104,7 @@ class _SongTileState extends State<SongTile> {
                           SizedBox(
                             width: 235,
                             child: Text(
-                              '${widget.homeBuildList[widget.songIndex].metas.artist}',
+                              '${homeBuildList[songIndex].metas.artist}',
                               style: const TextStyle(
                                   color: Color.fromARGB(150, 255, 255, 255),
                                   overflow: TextOverflow.ellipsis,
@@ -148,36 +125,5 @@ class _SongTileState extends State<SongTile> {
         ],
       ),
     );
-  }
-
-  durationCovert() {
-    List<String> temp =
-        double.parse('${widget.homeBuildList[widget.songIndex].metas.album}')
-            .toStringAsFixed(1)
-            .split('')
-            .sublist(0, 3);
-    String durationText = '${temp[0]}:${temp[1]}${temp[2]}';
-    return durationText;
-  }
-
-  addToPlayList() {
-    final playList = box.values.toList().cast<List>();
-
-    if (widget.playlistName == "favorite") {
-      Favorite.AddToFavorite(
-        context: context,
-        songId: widget.homeBuildList[widget.songIndex].metas.id!,
-      );
-      Navigator.pop(context);
-    }
-    if (widget.playlistName != "favorite") {
-      Favorite.AddSongToPlaylist(
-        name: widget.playlistName,
-        songId: widget.homeBuildList[widget.songIndex].metas.id!,
-        context: context,
-      );
-      setState(() {});
-      Navigator.pop(context);
-    }
   }
 }

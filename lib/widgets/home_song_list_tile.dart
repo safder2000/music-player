@@ -4,8 +4,7 @@ import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/carbon.dart';
-import 'package:music_player/db/all_songs.dart';
-import 'package:music_player/db/functions/Boxes.dart';
+
 import 'package:music_player/widgets/addToFavorite.dart';
 import 'package:music_player/widgets/addToPlaylistTile.dart';
 import 'package:music_player/widgets/addToRecent.dart';
@@ -14,7 +13,9 @@ import 'package:music_player/widgets/miniplayer.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:music_player/db/functions/player.dart';
 
-class HomeSongListTile extends StatefulWidget {
+final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+class HomeSongListTile extends StatelessWidget {
   HomeSongListTile({
     Key? key,
     required this.homeBuildList,
@@ -25,12 +26,8 @@ class HomeSongListTile extends StatefulWidget {
   AssetImage songImg;
   final songIndex;
 
-  @override
-  State<HomeSongListTile> createState() => _HomeSongListTileState();
-}
-
-class _HomeSongListTileState extends State<HomeSongListTile> {
   Object? _value = 0;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -46,17 +43,15 @@ class _HomeSongListTileState extends State<HomeSongListTile> {
                       backgroundColor: Color.fromARGB(0, 1, 64, 64),
                       context: context,
                       builder: (context) => MiniPlayer(
-                        // songIndex: widget.songIndex,
+                        songIndex: songIndex,
                         // assetsAudioPlayer: assetsAudioPlayer,
-                        homeBuildList: widget.homeBuildList,
+                        homeBuildList: homeBuildList,
                       ),
                     );
                     Recent.AddToRecent(
-                        songId:
-                            widget.homeBuildList[widget.songIndex].metas.id!);
+                        songId: homeBuildList[songIndex].metas.id!);
 
-                    Player.openPlayer(
-                        widget.homeBuildList, widget.songIndex, context);
+                    Player.openPlayer(homeBuildList, songIndex, context);
                   },
                   child: Row(
                     children: [
@@ -67,7 +62,7 @@ class _HomeSongListTileState extends State<HomeSongListTile> {
                               const BorderRadius.all(Radius.circular(10)),
                           image: DecorationImage(
                             alignment: Alignment.topCenter,
-                            image: widget.songImg,
+                            image: songImg,
                             fit: BoxFit.fill,
                           ),
                         ),
@@ -75,8 +70,7 @@ class _HomeSongListTileState extends State<HomeSongListTile> {
                         width: 50,
                         child: SizedBox(
                           child: QueryArtworkWidget(
-                            id: int.parse(widget
-                                .homeBuildList[widget.songIndex].metas.id!),
+                            id: int.parse(homeBuildList[songIndex].metas.id!),
                             type: ArtworkType.AUDIO,
                             artworkBorder: BorderRadius.circular(8),
                             nullArtworkWidget: Image(
@@ -93,8 +87,7 @@ class _HomeSongListTileState extends State<HomeSongListTile> {
                           SizedBox(
                             width: 235,
                             child: Text(
-                              widget
-                                  .homeBuildList[widget.songIndex].metas.title!,
+                              homeBuildList[songIndex].metas.title!,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
                                   color: Colors.white, fontSize: 18),
@@ -106,7 +99,7 @@ class _HomeSongListTileState extends State<HomeSongListTile> {
                           SizedBox(
                             width: 235,
                             child: Text(
-                              '${widget.homeBuildList[widget.songIndex].metas.artist}',
+                              '${homeBuildList[songIndex].metas.artist}',
                               style: const TextStyle(
                                   color: Color.fromARGB(150, 255, 255, 255),
                                   overflow: TextOverflow.ellipsis,
@@ -123,13 +116,13 @@ class _HomeSongListTileState extends State<HomeSongListTile> {
                 color: Color.fromARGB(255, 1, 64, 64),
                 onSelected: (result) {
                   if (result == 1) {
-                    addToPlayList();
+                    addToPlayList(context: context);
                   }
                   if (result == 2) {
                     Favorite.AddToFavorite(
                         context: context,
-                        songId:
-                            widget.homeBuildList[widget.songIndex].metas.id!);
+                        songId: homeBuildList[songIndex].metas.id!,
+                        key: _scaffoldKey);
                   }
                 },
                 itemBuilder: (context) => [
@@ -205,16 +198,15 @@ class _HomeSongListTileState extends State<HomeSongListTile> {
   }
 
   durationCovert() {
-    List<String> temp =
-        double.parse('${widget.homeBuildList[widget.songIndex].metas.album}')
-            .toStringAsFixed(1)
-            .split('')
-            .sublist(0, 3);
+    List<String> temp = double.parse('${homeBuildList[songIndex].metas.album}')
+        .toStringAsFixed(1)
+        .split('')
+        .sublist(0, 3);
     String durationText = '${temp[0]}:${temp[1]}${temp[2]}';
     return durationText;
   }
 
-  addToPlayList() {
+  addToPlayList({required context}) {
     final playList = box.values.toList().cast<List>();
     List playListName = box.keys.toList();
     showModalBottomSheet(
@@ -238,7 +230,7 @@ class _HomeSongListTileState extends State<HomeSongListTile> {
               itemCount: playList.length,
               itemBuilder: (BuildContext context, int index) => AddToPlayList(
                 name: playListName[index].toString(),
-                songId: widget.homeBuildList[widget.songIndex].metas.id,
+                songId: homeBuildList[songIndex].metas.id,
               ),
             ),
           ),

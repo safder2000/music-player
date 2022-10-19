@@ -1,26 +1,22 @@
 import 'dart:developer';
-import 'dart:ffi';
 
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/carbon.dart';
+
+import 'package:music_player/application/playlist_folder/playlist_folder_bloc.dart';
 import 'package:music_player/colors/colors.dart';
 import 'package:music_player/db/all_songs.dart';
 import 'package:music_player/db/functions/Boxes.dart';
-import 'package:music_player/db/functions/player.dart';
-import 'package:music_player/db/functions/playlist.dart';
 
-import 'package:music_player/screens/menu/screen_main.dart';
 import 'package:music_player/screens/playlist/widgets/default_playlist.dart';
-import 'package:music_player/widgets/addToFavorite.dart';
 
-import 'package:music_player/widgets/miniplayer.dart';
 import 'package:music_player/screens/playlist/widgets/playlist_tile.dart';
-import 'package:music_player/db/functions/player.dart';
 
-class ScreenPlaylist extends StatefulWidget {
+class ScreenPlaylist extends StatelessWidget {
   List<Audio> homeBuildList;
   // int songIndex;
   ScreenPlaylist({
@@ -29,11 +25,6 @@ class ScreenPlaylist extends StatefulWidget {
     //  required this.songIndex
   }) : super(key: key);
 
-  @override
-  State<ScreenPlaylist> createState() => _ScreenPlaylistState();
-}
-
-class _ScreenPlaylistState extends State<ScreenPlaylist> {
   final box = Boxes.getList();
   final _newPlayList = TextEditingController();
   List<AllSongs> playlists = [];
@@ -41,14 +32,9 @@ class _ScreenPlaylistState extends State<ScreenPlaylist> {
   final formkey = GlobalKey<FormState>();
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    final playList = box.values.toList().cast<List>();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    context.read<PlaylistFolderBloc>().add(AllPlaylists());
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -116,12 +102,6 @@ class _ScreenPlaylistState extends State<ScreenPlaylist> {
                             ),
                           ),
                         ),
-                        // title: Text(
-                        //   'New Playlist',
-                        //   style: TextStyle(
-                        //       color: Color.fromARGB(255, 202, 212, 128),
-                        //       fontSize: 25),
-                        // ),
                         actions: [
                           InkWell(
                             onTap: (() => Navigator.pop(context)),
@@ -156,7 +136,6 @@ class _ScreenPlaylistState extends State<ScreenPlaylist> {
                                   if (formkey.currentState!.validate()) {
                                     box.put(playListTitle, playlists);
                                     Navigator.pop(context);
-                                    setState(() {});
                                   }
                                 },
                                 child: const Icon(
@@ -176,20 +155,6 @@ class _ScreenPlaylistState extends State<ScreenPlaylist> {
                 color: Colors.white,
                 size: 29,
               )),
-          // IconButton(
-          //     onPressed: () {},
-          //     icon: const Iconify(
-          //       Carbon.edit,
-          //       color: Colors.white,
-          //       size: 24,
-          //     )),
-          // IconButton(
-          //     onPressed: () {},
-          //     icon: const Iconify(
-          //       Carbon.delete,
-          //       color: Colors.white,
-          //       size: 22,
-          //     )),
         ],
       ),
       body: ListView(
@@ -217,27 +182,13 @@ class _ScreenPlaylistState extends State<ScreenPlaylist> {
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
                       height: MediaQuery.of(context).size.height,
                       child: ListView(
                         children: [
                           //===================================================================
-                          // PlayListTile(
-                          //   icon: Icon(
-                          //     Icons.favorite,
-                          //     color: Color.fromARGB(255, 93, 114, 22),
-                          //   ),
-                          //   name: 'Favorite',
-                          // ),
-                          // PlayListTile(
-                          //   icon: Icon(
-                          //     Icons.timelapse,
-                          //     color: Color.fromARGB(255, 93, 114, 22),
-                          //   ),
-                          //   name: 'Recent',
-                          // ),
+
                           SizedBox(
                             height: 4,
                           ),
@@ -250,16 +201,21 @@ class _ScreenPlaylistState extends State<ScreenPlaylist> {
 
                           Container(
                             height: MediaQuery.of(context).size.height,
-                            child: ValueListenableBuilder<Box<List>>(
-                              valueListenable: Boxes.getList().listenable(),
-                              builder: (BuildContext ctx, box, _) {
-                                List keys = box.keys.toList();
+                            child: BlocBuilder<PlaylistFolderBloc,
+                                PlaylistFolderState>(
+                              builder: (context, state) {
+                                return
+                                    // ValueListenableBuilder<Box<List>>(
+                                    //   valueListenable: Boxes.getList().listenable(),
+                                    //   builder: (BuildContext ctx, box, _) {
+                                    //     List keys = box.keys.toList();
 
-                                return ListView.builder(
-                                  itemCount: keys.length,
+                                    //     return
+                                    ListView.builder(
+                                  itemCount: state.playlistNames.length,
                                   itemBuilder:
                                       (BuildContext context, int index) {
-                                    String title = keys[index];
+                                    String title = state.playlistNames[index];
 
                                     return PlayListTile(
                                       name: title,
@@ -267,14 +223,9 @@ class _ScreenPlaylistState extends State<ScreenPlaylist> {
                                     );
                                   },
                                 );
+                                //   },
+                                // );
                               },
-                              //  PlayListTile(
-                              //   icon: Icon(
-                              //     Icons.book_online_sharp,
-                              //     color: Color.fromARGB(255, 93, 114, 22),
-                              //   ),
-                              //   name: 'AR rahman',
-                              // ),
                             ),
                           ),
                         ],

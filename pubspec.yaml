@@ -48,6 +48,8 @@ dependencies:
   hive_flutter: ^1.1.0
   flutter_launcher_icons: ^0.10.0
   text_scroll: ^0.1.0
+  flutter_bloc: ^8.1.1
+  bloc: ^8.1.0
 
 
 dev_dependencies:
@@ -55,7 +57,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   hive_generator: ^1.1.3
-  build_runner: ^1.12.2
+  build_runner: ^2.2.1
+  # build_runner: ^1.12.2
 
 flutter_icons:
   android: true
@@ -94,6 +97,7 @@ flutter:
   assets:
     - assets/images/1.jpg
     - assets/images/defult.jpg
+    - assets/images/empty.gif
     - assets/images/background1.jpg
     - assets/images/background2.jpg
     - assets/covers/Ohayo.jpg

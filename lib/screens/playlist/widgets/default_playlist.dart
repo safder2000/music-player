@@ -34,8 +34,7 @@ class defaultPlaylist extends StatelessWidget {
       child: InkWell(
         onTap: () => Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (ctx1) =>
-                ScreenMainPlaylist(playlist: playlist, playlistName: name),
+            builder: (ctx1) => ScreenMainPlaylist(playlistName: name),
           ),
         ),
         child: Container(

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:music_player/colors/colors.dart';
 import 'package:music_player/db/functions/Boxes.dart';
+
+import '../../../application/playlist_folder/playlist_folder_bloc.dart';
 
 class PlaylistRename extends StatelessWidget {
   PlaylistRename({super.key, required this.oldName});
@@ -89,9 +92,10 @@ class PlaylistRename extends StatelessWidget {
             InkWell(
               onTap: () {
                 if (formkey.currentState!.validate()) {
-                  List? playlists = _box.get(oldName);
-                  _box.put(_title, playlists!);
-                  _box.delete(oldName);
+                  context
+                      .read<PlaylistFolderBloc>()
+                      .add(RenamePlaylist(oldName: oldName, newName: _title!));
+
                   Navigator.pop(context);
                 }
               },

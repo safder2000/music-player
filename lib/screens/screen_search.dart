@@ -1,16 +1,16 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_launcher_icons/xml_templates.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'dart:developer';
 import 'package:iconify_flutter/iconify_flutter.dart'; // For Iconify Widget
 
 import 'package:iconify_flutter/icons/carbon.dart';
+import 'package:music_player/application/search/search_bloc.dart';
 import 'package:music_player/db/all_songs.dart';
 import 'package:music_player/db/functions/Boxes.dart';
 
 import 'package:music_player/widgets/home_song_list_builder.dart';
-
-import 'package:music_player/widgets/home_song_list_tile.dart';
 
 class ScreenSearch extends StatefulWidget {
   const ScreenSearch({Key? key}) : super(key: key);
@@ -106,21 +106,26 @@ class ScreenSearchstate extends State<ScreenSearch> {
                                           size: 25,
                                         )),
                                     SizedBox(
-                                        width: 264,
-                                        child: TextField(
-                                          controller: searchController,
-                                          decoration: InputDecoration(
-                                              hintText: 'Song title',
-                                              suffixIcon: IconButton(
-                                                onPressed:
-                                                    searchController.clear,
-                                                icon: Icon(
-                                                  Icons.clear,
-                                                  color: Color.fromARGB(
-                                                      222, 1, 64, 64),
-                                                ),
-                                              )),
-                                        )),
+                                      width: 264,
+                                      child: TextField(
+                                        controller: searchController,
+                                        onChanged: (value) {
+                                          context.read<SearchBloc>().add(
+                                              SearchSong(search_text: value));
+                                        },
+                                        decoration: InputDecoration(
+                                          hintText: 'Song title',
+                                          suffixIcon: IconButton(
+                                            onPressed: searchController.clear,
+                                            icon: Icon(
+                                              Icons.clear,
+                                              color: Color.fromARGB(
+                                                  222, 1, 64, 64),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -132,60 +137,63 @@ class ScreenSearchstate extends State<ScreenSearch> {
                             const SizedBox(
                               height: 10,
                             ),
-                            ValueListenableBuilder(
-                                valueListenable: searchController,
-                                // valueListenable: _searchController.value,
-                                builder:
-                                    (BuildContext ctx, index, Widget? child) {
-                                  final songBox = Boxes.getSongs();
-                                  List<AllSongs> dbSongs =
-                                      songBox.values.toList().cast<AllSongs>();
-                                  List<AllSongs> filteredList = <AllSongs>[];
-                                  //  for(int i=0; i<=student_data.length; i++){
+                            BlocBuilder<SearchBloc, SearchState>(
+                              builder: (context, state) {
+                                //  ValueListenableBuilder(
+                                //     valueListenable: searchController,
+                                //     builder: (BuildContext ctx, index,
+                                //         Widget? child) {
+                                // final songBox = Boxes.getSongs();
+                                // List<AllSongs> dbSongs = songBox.values
+                                //     .toList()
+                                //     .cast<AllSongs>();
+                                // List<AllSongs> filteredList =
+                                //     <AllSongs>[];
+                                // //  for(int i=0; i<=student_data.length; i++){
 
-                                  //  }
-                                  for (AllSongs temp in dbSongs) {
-                                    if (temp.title
-                                        .toString()
-                                        .toUpperCase()
-                                        .contains(searchController.text
-                                            .toUpperCase())) {
-                                      filteredList.add(temp);
-                                    }
-                                  }
-                                  List<Audio> filterdSongs = [];
-                                  for (var element in filteredList) {
-                                    filterdSongs.add(
-                                      Audio.file(
-                                        element.uri.toString(),
-                                        metas: Metas(
-                                            title: element.title,
-                                            id: element.id.toString(),
-                                            artist: element.artist,
-                                            album: element.duration!
-                                                .toStringAsFixed(2)),
-                                      ),
-                                    );
-                                  }
+                                // //  }
+                                // for (AllSongs temp in dbSongs) {
+                                //   if (temp.title
+                                //       .toString()
+                                //       .toUpperCase()
+                                //       .contains(searchController.text
+                                //           .toUpperCase())) {
+                                //     filteredList.add(temp);
+                                //   }
+                                // }
+                                // List<Audio> filterdSongs = [];
+                                // for (var element in filteredList) {
+                                //   filterdSongs.add(
+                                //     Audio.file(
+                                //       element.uri.toString(),
+                                //       metas: Metas(
+                                //           title: element.title,
+                                //           id: element.id.toString(),
+                                //           artist: element.artist,
+                                //           album: element.duration!
+                                //               .toStringAsFixed(2)),
+                                //     ),
+                                //   );
+                                // }
 
-                                  return Container(
-                                      child: filteredList.isNotEmpty
-                                          ? SizedBox(
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  05,
-                                              child: LocalSongListBuilder(
-                                                  homeBuildList: filterdSongs),
-                                            )
-                                          : SizedBox(
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  .5,
-                                              child: songNotFound(),
-                                            ));
-                                }
+                                return Container(
+                                    child: state.songs.isNotEmpty
+                                        ? SizedBox(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                05,
+                                            child: LocalSongListBuilder(
+                                                homeBuildList: state.songs),
+                                          )
+                                        : SizedBox(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                .5,
+                                            child: songNotFound(),
+                                          ));
+                                // }
                                 //===================================================================
                                 // HomeSongListTile(
                                 //   songTitle: 'LongNights',
@@ -195,7 +203,9 @@ class ScreenSearchstate extends State<ScreenSearch> {
                                 // ),
 
                                 //=========================================================================
-                                ),
+                                // );
+                              },
+                            ),
                           ],
                         ),
                       ],

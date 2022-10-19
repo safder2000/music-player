@@ -1,5 +1,6 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 
@@ -7,26 +8,33 @@ import 'package:iconify_flutter/iconify_flutter.dart'; // For Iconify Widget
 import 'package:iconify_flutter/icons/zondicons.dart'; // for Non Colorful Icons
 
 import 'package:iconify_flutter/icons/carbon.dart';
+
+import 'package:music_player/application/home_page/home_page_bloc.dart';
 import 'package:music_player/colors/colors.dart';
 
 import 'package:music_player/screens/menu/screen_menu.dart';
 import 'package:music_player/screens/playlist/screen_playlist.dart';
 import 'package:music_player/screens/screen_search.dart';
-import 'package:music_player/screens/screen_splash.dart';
 
 import 'package:music_player/widgets/home_song_list_builder.dart';
-import 'package:music_player/widgets/miniplayer.dart';
+
 import 'package:iconify_flutter/icons/ph.dart';
 
-class ScreenHome extends StatefulWidget {
-  ScreenHome({Key? key, required this.homeBuildList}) : super(key: key);
-  List<Audio> homeBuildList = [];
+class MyWidget extends StatelessWidget {
+  const MyWidget({super.key});
 
   @override
-  State<ScreenHome> createState() => ScreenHomestate();
+  Widget build(BuildContext context) {
+    return Container();
+  }
 }
 
-class ScreenHomestate extends State<ScreenHome> {
+class ScreenHome extends StatelessWidget {
+  ScreenHome({
+    Key? key,
+  }) : super(key: key);
+  List<Audio> homeBuildList = [];
+
   //============================= Asset Audio ===================================================================
 
   @override
@@ -39,11 +47,8 @@ class ScreenHomestate extends State<ScreenHome> {
           backgroundColor: const Color.fromARGB(255, 1, 64, 64),
           // leading: IconButton(onPressed: () {}, icon: Icon(Icons.settings)),
           leading: IconButton(
-            onPressed: () => ZoomDrawer(
-                menuScreen: ScreenMenu(),
-                mainScreen: ScreenHome(
-                  homeBuildList: widget.homeBuildList,
-                )),
+            onPressed: () =>
+                ZoomDrawer(menuScreen: ScreenMenu(), mainScreen: ScreenHome()),
             icon: const Iconify(Ph.list, color: kYellow),
           ),
           title: Text(
@@ -81,7 +86,7 @@ class ScreenHomestate extends State<ScreenHome> {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (ctx1) => ScreenPlaylist(
-                                homeBuildList: widget.homeBuildList,
+                                homeBuildList: homeBuildList,
                               ),
                             ),
                           );
@@ -131,8 +136,18 @@ class ScreenHomestate extends State<ScreenHome> {
                     children: [
                       SizedBox(
                           height: MediaQuery.of(context).size.height * 0.88,
-                          child: LocalSongListBuilder(
-                              homeBuildList: widget.homeBuildList)),
+                          child: BlocBuilder<HomePageBloc, HomePageState>(
+                            builder: (context, state) {
+                              if (state.songs.isEmpty) {
+                                Center(
+                                  child:
+                                      CircularProgressIndicator(color: kYellow),
+                                );
+                              }
+                              return LocalSongListBuilder(
+                                  homeBuildList: state.songs);
+                            },
+                          )),
                     ],
                   ),
                 ),
