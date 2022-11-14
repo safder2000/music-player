@@ -7,7 +7,6 @@ import 'package:text_scroll/text_scroll.dart';
 import 'package:iconify_flutter/icons/radix_icons.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:iconify_flutter/icons/mdi_light.dart';
-import 'package:music_player/db/all_songs.dart';
 import 'package:music_player/screens/playlist/screen_playlist.dart';
 
 import 'package:on_audio_query/on_audio_query.dart';
@@ -22,22 +21,8 @@ class ScreenMainPlayer extends StatelessWidget {
   }) : super(key: key);
   List<Audio> homeBuildList = [];
 
-  bool isFavorate = true;
-
-  bool isRepeat = true;
-
-  bool isPause = true;
-  int _selectedIndex = 0;
   Audio find(List<Audio> source, String fromPath) {
     return source.firstWhere((element) => element.path == fromPath);
-  }
-
-  List<AllSongs> dbSongs = [];
-
-  AllSongs findSong(List<AllSongs> songs, String id) {
-    return songs.firstWhere(
-      (element) => element.id.toString().contains(id),
-    );
   }
 
   @override
@@ -70,9 +55,9 @@ class ScreenMainPlayer extends StatelessWidget {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (ctx1) => ScreenPlaylist(
-                                homeBuildList: homeBuildList,
-                                // songIndex: widget.songIndex,
-                              ),
+
+                                  // songIndex: widget.songIndex,
+                                  ),
                             ),
                           );
                         },
@@ -216,7 +201,7 @@ class ScreenMainPlayer extends StatelessWidget {
                                             width: 200,
                                             child: Text(
                                               // '${widget.homeBuildList[_selectedIndex].metas.album}',
-                                              myAudio!.metas.artist!,
+                                              myAudio.metas.artist!,
                                               style: const TextStyle(
                                                   color: Color.fromARGB(
                                                       125, 167, 167, 167),
@@ -406,10 +391,6 @@ class ScreenMainPlayer extends StatelessWidget {
                                                   .add(PlayPause(
                                                       isPlaying:
                                                           !state.isPlaying));
-                                              context
-                                                  .read<MainPlayerBloc>()
-                                                  .add(IsPlaying(
-                                                      isPlaying: true));
                                             }, //FaIcon(FontAwesomeIcons.gamepad),
                                             icon: state.isPlaying == true
                                                 ? const Iconify(
@@ -434,7 +415,7 @@ class ScreenMainPlayer extends StatelessWidget {
                                             .add(PlayNext());
                                         context
                                             .read<MainPlayerBloc>()
-                                            .add(PlayPrevious());
+                                            .add(IsPlaying(isPlaying: true));
                                       }, //FaIcon(FontAwesomeIcons.gamepad),
                                       icon: const Iconify(
                                         RadixIcons.track_next,

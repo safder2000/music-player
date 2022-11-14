@@ -22,7 +22,7 @@ class FetchSong {
       }
     }
     allSongs.sort((a, b) {
-      return a.title!.compareTo(b.title!);
+      return a.title.compareTo(b.title);
     });
 //change
     for (var audio in allSongs) {
@@ -34,7 +34,7 @@ class FetchSong {
         duration: audio.duration,
         dateModified: audio.dateModified,
       );
-      // afterMapping.add(temp);
+
       await songBox.put(audio.id, temp);
       List<dynamic> favKeys = listBox.keys.toList();
       if (!favKeys.contains("favorite")) {

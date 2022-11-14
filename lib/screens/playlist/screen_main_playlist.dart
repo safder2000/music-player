@@ -113,38 +113,36 @@ class ScreenMainPlaylist extends StatelessWidget {
                             topRight: Radius.circular(40),
                             bottomRight: Radius.circular(40),
                           )),
-                      child: InkWell(
-                        onTap: () {
-                          BlocBuilder<PlaylistBloc, PlaylistState>(
-                            builder: (context, state) {
-                              return state.songs.isEmpty
-                                  ? EmptyPlaylist(context: context)
-                                  : PlayAll(
-                                      context: context, audioFile: state.songs);
-                            },
+                      child: BlocBuilder<PlaylistBloc, PlaylistState>(
+                        builder: (context, state) {
+                          return Row(
+                            children: [
+                              IconButton(
+                                icon: const Iconify(
+                                  Carbon.play,
+                                  color: Color.fromARGB(255, 27, 82, 72),
+                                  size: 35,
+                                ),
+                                onPressed: () {
+                                  state.songs.isEmpty
+                                      ? EmptyPlaylist(context: context)
+                                      : PlayAll(
+                                          context: context,
+                                          audioFile: state.songs);
+                                },
+                              ),
+                              const Text(
+                                'Play All',
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 27, 82, 72),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                            ],
                           );
                         },
-                        child: Row(
-                          children: [
-                            IconButton(
-                              icon: const Iconify(
-                                Carbon.play,
-                                color: Color.fromARGB(255, 27, 82, 72),
-                                size: 35,
-                              ),
-                              onPressed: () {},
-                            ),
-                            const Text(
-                              'Play All',
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 27, 82, 72),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                          ],
-                        ),
                       ),
                     ),
                   ),

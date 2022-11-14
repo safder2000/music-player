@@ -17,11 +17,10 @@ import 'package:music_player/screens/playlist/widgets/default_playlist.dart';
 import 'package:music_player/screens/playlist/widgets/playlist_tile.dart';
 
 class ScreenPlaylist extends StatelessWidget {
-  List<Audio> homeBuildList;
   // int songIndex;
   ScreenPlaylist({
     Key? key,
-    required this.homeBuildList,
+
     //  required this.songIndex
   }) : super(key: key);
 

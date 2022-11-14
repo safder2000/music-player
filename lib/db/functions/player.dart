@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iconify_flutter/icons/fa.dart';
 import 'package:music_player/application/main_player/main_player_bloc.dart';
 import 'package:music_player/db/all_songs.dart';
 import 'package:music_player/infrastructure/playlist_functions.dart';
@@ -13,6 +14,7 @@ final AssetsAudioPlayer assetsAudioPlayer = AssetsAudioPlayer.withId("0");
 
 class Player {
   static bool temp = true;
+  static bool controlPlay = false;
 
 // Player({required this.SongList, required this.index, this.context});
 // List<Audio> SongList;
@@ -38,14 +40,19 @@ class Player {
   ) async {
     // int _selectedIndex;
     // List<Audio> playingList=[];
-    try {
-      await assetsAudioPlayer.open(
-          Playlist(audios: playingList, startIndex: songIndex),
-          autoStart: true,
-          showNotification: temp);
-      context.read<MainPlayerBloc>().add(PlayPause(isPlaying: true));
-    } on Exception {
-      log('fetching error......................<<<<<');
+    if (!controlPlay) {
+      controlPlay = true;
+      await Future.delayed(const Duration(milliseconds: 200));
+      try {
+        await assetsAudioPlayer.open(
+            Playlist(audios: playingList, startIndex: songIndex),
+            autoStart: true,
+            showNotification: temp);
+        context.read<MainPlayerBloc>().add(PlayPause(isPlaying: true));
+      } on Exception {
+        log('fetching error......................<<<<<');
+      }
+      controlPlay = false;
     }
   }
 
@@ -88,20 +95,30 @@ class Player {
   }
 
   static playNextSong() async {
-    try {
-      await assetsAudioPlayer.next();
-      await assetsAudioPlayer.play();
-    } on Exception {
-      log('Unsupported format');
+    if (!controlPlay) {
+      controlPlay = true;
+      await Future.delayed(const Duration(milliseconds: 200));
+      try {
+        await assetsAudioPlayer.next();
+        await assetsAudioPlayer.play();
+      } on Exception {
+        log('Unsupported format');
+      }
     }
+    controlPlay = false;
   }
 
   static playPreviusSong() async {
-    try {
-      await assetsAudioPlayer.previous();
-      await assetsAudioPlayer.play();
-    } on Exception {
-      log('Unsupported format');
+    if (!controlPlay) {
+      controlPlay = true;
+      await Future.delayed(const Duration(milliseconds: 200));
+      try {
+        await assetsAudioPlayer.previous();
+        await assetsAudioPlayer.play();
+      } on Exception {
+        log('Unsupported format');
+      }
     }
+    controlPlay = false;
   }
 }
